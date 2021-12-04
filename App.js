@@ -5,8 +5,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import Phone from './screens/Phone'
 import HomeScreen from './screens/HomeScreen'
+import Favorites from './screens/Favorites'
 const Drawer = createDrawerNavigator()
 import { Ionicons } from '@expo/vector-icons'
+import Sidebar from './customDrawer'
 
 export default function App () {
   return (
@@ -18,7 +20,10 @@ export default function App () {
 
 function AppDrawer () {
   return (
-    <Drawer.Navigator initialRouteName='Home'>
+    <Drawer.Navigator
+      initialRouteName='Home'
+      drawerContent={props => <Sidebar {...props} />}
+    >
       <Drawer.Screen
         name='Home'
         component={HomeScreen}
@@ -40,9 +45,30 @@ function AppDrawer () {
         options={{
           drawerIcon: ({ focused, color, size }) => {
             if (focused) {
-              return <Ionicons name='list' size={size} color={color} />
+              return (
+                <Ionicons name='phone-portrait' size={size} color={color} />
+              )
             } else {
-              return <Ionicons name='list-outline' size={size} color={color} />
+              return (
+                <Ionicons
+                  name='phone-portrait-outline'
+                  size={size}
+                  color={color}
+                />
+              )
+            }
+          }
+        }}
+      />
+      <Drawer.Screen
+        name='Favorites'
+        component={Favorites}
+        options={{
+          drawerIcon: ({ focused, color, size }) => {
+            if (focused) {
+              return <Ionicons name='heart-sharp' size={size} color={color} />
+            } else {
+              return <Ionicons name='heart-outline' size={size} color={color} />
             }
           }
         }}
