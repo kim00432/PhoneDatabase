@@ -3,6 +3,8 @@ import React from 'react'
 import { StyleSheet, Text, View, Button } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import Phone from './screens/Phone'
+import HomeScreen from './screens/HomeScreen'
 const Drawer = createDrawerNavigator()
 
 const MyTheme = {
@@ -21,27 +23,6 @@ export default function App () {
         <Drawer.Screen name='Phone' component={Phone} />
       </Drawer.Navigator>
     </NavigationContainer>
-  )
-}
-
-function HomeScreen ({ navigation }) {
-  return (
-    <View>
-      <Text>HomeScreen</Text>
-      <Button
-        onPress={() => navigation.navigate('Phone')}
-        title='Go to Phone'
-      />
-    </View>
-  )
-}
-
-function Phone ({ navigation }) {
-  return (
-    <View>
-      <Text>Phone</Text>
-      <Button onPress={() => navigation.goBack()} title='Go back home' />
-    </View>
   )
 }
 
