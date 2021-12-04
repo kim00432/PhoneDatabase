@@ -6,8 +6,12 @@ export default function HomeScreen ({ navigation }) {
     <View>
       <Text>HomeScreen</Text>
       <Button
-        onPress={() => navigation.navigate('Phone')}
+        onPress={() => navigation.navigate('Details')}
         title='Go to Phone'
+      />
+      <Button
+        onPress={() => navigation.navigate('Favorites')}
+        title='Go to Favorites'
       />
     </View>
   )
