@@ -1,6 +1,7 @@
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
+import { useState } from 'react'
 import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import {
   NavigationContainer,
@@ -8,12 +9,13 @@ import {
   useNavigation,
   DrawerActions
 } from '@react-navigation/native'
+
 import Phone from './screens/Phone'
 import HomeScreen from './screens/HomeScreen'
 import Favorites from './screens/Favorites'
+import Sidebar from './customDrawer'
 const Drawer = createDrawerNavigator()
 import { Ionicons } from '@expo/vector-icons'
-import Sidebar from './customDrawer'
 
 export default function App () {
   return (
@@ -24,6 +26,13 @@ export default function App () {
 }
 
 function AppDrawer () {
+  // top-level state data being passed to screens
+  const [phoneDetails, setPhoneDetails] = useState([])
+  const [phoneURL, setPhoneURL] = useState([])
+  const [phoneResults, setPhoneResults] = useState([])
+  const [phoneModel, setPhoneModel] = useState('iPhone 12')
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
   const navigation = useNavigation()
 
   return (
@@ -53,7 +62,6 @@ function AppDrawer () {
     >
       <Drawer.Screen
         name='Home'
-        component={HomeScreen}
         options={{
           drawerIcon: ({ focused, color, size }) => {
             if (focused) {
@@ -65,10 +73,26 @@ function AppDrawer () {
             }
           }
         }}
-      />
+      >
+        {props => (
+          <HomeScreen
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
+
       <Drawer.Screen
         name='Details'
-        component={Phone}
         options={{
           drawerIcon: ({ focused, color, size }) => {
             if (focused) {
@@ -86,10 +110,26 @@ function AppDrawer () {
             }
           }
         }}
-      />
+      >
+        {props => (
+          <Phone
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
+
       <Drawer.Screen
         name='Favorites'
-        component={Favorites}
         options={{
           drawerIcon: ({ focused, color, size }) => {
             if (focused) {
@@ -99,7 +139,23 @@ function AppDrawer () {
             }
           }
         }}
-      />
+      >
+        {props => (
+          <Favorites
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
     </Drawer.Navigator>
   )
 }
