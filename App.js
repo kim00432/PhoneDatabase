@@ -1,8 +1,13 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import {
+  NavigationContainer,
+  DefaultTheme,
+  useNavigation,
+  DrawerActions
+} from '@react-navigation/native'
 import Phone from './screens/Phone'
 import HomeScreen from './screens/HomeScreen'
 import Favorites from './screens/Favorites'
@@ -19,10 +24,32 @@ export default function App () {
 }
 
 function AppDrawer () {
+  const navigation = useNavigation()
+
   return (
     <Drawer.Navigator
       initialRouteName='Home'
       drawerContent={props => <Sidebar {...props} />}
+      screenOptions={{
+        headerLeft: ({ color }) => (
+          <Pressable
+            onPress={() => {
+              navigation.dispatch(DrawerActions.toggleDrawer())
+            }}
+          >
+            <Ionicons
+              name='reorder-two-outline'
+              size={34}
+              color={color}
+              style={{ marginLeft: 12 }}
+            />
+          </Pressable>
+        ),
+        headerShadowVisible: false,
+        presentation: 'card',
+        drawerType: 'slide',
+        overlayColor: '#00000033'
+      }}
     >
       <Drawer.Screen
         name='Home'
