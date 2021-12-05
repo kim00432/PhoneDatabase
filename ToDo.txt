@@ -4,8 +4,8 @@
 
 # React Native core components:
 
-- View
-- Text
+X View
+X Text
 - Image
 - FlatList or ScrollView
 - Button
@@ -20,7 +20,7 @@
 # 3 React Native APIs
 
 - Alert or Prompt
-- StyleSheet
+X StyleSheet
 - Keyboard or Platform
 
 
