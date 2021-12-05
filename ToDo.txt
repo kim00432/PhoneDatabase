@@ -1,0 +1,34 @@
+
+# # ------------ Chosen features: ------------ # #
+
+
+# React Native core components:
+
+- View
+- Text
+- Image
+- FlatList or ScrollView
+- Button
+- Pressable
+- SafeAreaView
+- KeyboardAvoidingView
+- StatusBar
+- TextInput
+- ActivityIndicator
+
+
+# 3 React Native APIs
+
+- Alert or Prompt
+- StyleSheet
+- Keyboard or Platform
+
+
+# 4 Expo Components/APIs
+
+- AppLoading
+- Clipboard
+- Font
+- ???
+
+# # ------------------------------------------ # #
