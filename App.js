@@ -77,13 +77,6 @@ function AppDrawer () {
   )
 }
 
-const DrawerTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: 'rgb(255, 255, 255)'
-  }
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -92,3 +85,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 })
+
+/* Editing default drawer theme */
+const DrawerTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'rgb(255, 255, 255)'
+  }
+}
