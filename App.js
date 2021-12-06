@@ -8,7 +8,6 @@ import {
   Pressable,
   SafeAreaView
 } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import {
   NavigationContainer,
@@ -67,129 +66,109 @@ function AppDrawer () {
         overlayColor: '#00000033'
       }}
     >
-      <SafeAreaView
-        style={styles.container}
-        edges={['right', 'bottom', 'left']}
-      >
-        <StatusBar style='auto' />
-        <Drawer.Screen
-          name='Home'
-          options={{
-            drawerIcon: ({ focused, color, size }) => {
-              if (focused) {
-                return <Ionicons name='md-home' size={size} color={color} />
-              } else {
-                return (
-                  <Ionicons name='md-home-outline' size={size} color={color} />
-                )
-              }
+      <Drawer.Screen
+        name='Home'
+        options={{
+          drawerIcon: ({ focused, color, size }) => {
+            if (focused) {
+              return <Ionicons name='md-home' size={size} color={color} />
+            } else {
+              return (
+                <Ionicons name='md-home-outline' size={size} color={color} />
+              )
             }
-          }}
-        >
-          {props => (
-            <HomeScreen
-              {...props}
-              phoneDetails={phoneDetails}
-              setPhoneDetails={setPhoneDetails}
-              phoneURL={phoneURL}
-              setPhoneURL={setPhoneURL}
-              phoneResults={phoneResults}
-              setPhoneResults={setPhoneResults}
-              phoneModel={phoneModel}
-              setPhoneModel={setPhoneModel}
-              isRefreshing={isRefreshing}
-              setIsRefreshing={setIsRefreshing}
-            />
-          )}
-        </Drawer.Screen>
-      </SafeAreaView>
+          }
+        }}
+      >
+        {props => (
+          <HomeScreen
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
 
-      <SafeAreaView
-        style={styles.container}
-        edges={['right', 'bottom', 'left']}
-      >
-        <StatusBar style='auto' />
-        <Drawer.Screen
-          name='Details'
-          options={{
-            drawerIcon: ({ focused, color, size }) => {
-              if (focused) {
-                return (
-                  <Ionicons name='phone-portrait' size={size} color={color} />
-                )
-              } else {
-                return (
-                  <Ionicons
-                    name='phone-portrait-outline'
-                    size={size}
-                    color={color}
-                  />
-                )
-              }
+      <Drawer.Screen
+        name='Details'
+        options={{
+          drawerIcon: ({ focused, color, size }) => {
+            if (focused) {
+              return (
+                <Ionicons name='phone-portrait' size={size} color={color} />
+              )
+            } else {
+              return (
+                <Ionicons
+                  name='phone-portrait-outline'
+                  size={size}
+                  color={color}
+                />
+              )
             }
-          }}
-        >
-          {props => (
-            <Phone
-              {...props}
-              phoneDetails={phoneDetails}
-              setPhoneDetails={setPhoneDetails}
-              phoneURL={phoneURL}
-              setPhoneURL={setPhoneURL}
-              phoneResults={phoneResults}
-              setPhoneResults={setPhoneResults}
-              phoneModel={phoneModel}
-              setPhoneModel={setPhoneModel}
-              isRefreshing={isRefreshing}
-              setIsRefreshing={setIsRefreshing}
-            />
-          )}
-        </Drawer.Screen>
-      </SafeAreaView>
+          }
+        }}
+      >
+        {props => (
+          <Phone
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
 
-      <SafeAreaView
-        style={styles.container}
-        edges={['right', 'bottom', 'left']}
-      >
-        <StatusBar style='auto' />
-        <Drawer.Screen
-          name='Favorites'
-          options={{
-            drawerIcon: ({ focused, color, size }) => {
-              if (focused) {
-                return <Ionicons name='heart-sharp' size={size} color={color} />
-              } else {
-                return (
-                  <Ionicons name='heart-outline' size={size} color={color} />
-                )
-              }
+      <Drawer.Screen
+        name='Favorites'
+        options={{
+          drawerIcon: ({ focused, color, size }) => {
+            if (focused) {
+              return <Ionicons name='heart-sharp' size={size} color={color} />
+            } else {
+              return <Ionicons name='heart-outline' size={size} color={color} />
             }
-          }}
-        >
-          {props => (
-            <Favorites
-              {...props}
-              phoneDetails={phoneDetails}
-              setPhoneDetails={setPhoneDetails}
-              phoneURL={phoneURL}
-              setPhoneURL={setPhoneURL}
-              phoneResults={phoneResults}
-              setPhoneResults={setPhoneResults}
-              phoneModel={phoneModel}
-              setPhoneModel={setPhoneModel}
-              isRefreshing={isRefreshing}
-              setIsRefreshing={setIsRefreshing}
-            />
-          )}
-        </Drawer.Screen>
-      </SafeAreaView>
+          }
+        }}
+      >
+        {props => (
+          <Favorites
+            {...props}
+            phoneDetails={phoneDetails}
+            setPhoneDetails={setPhoneDetails}
+            phoneURL={phoneURL}
+            setPhoneURL={setPhoneURL}
+            phoneResults={phoneResults}
+            setPhoneResults={setPhoneResults}
+            phoneModel={phoneModel}
+            setPhoneModel={setPhoneModel}
+            isRefreshing={isRefreshing}
+            setIsRefreshing={setIsRefreshing}
+          />
+        )}
+      </Drawer.Screen>
     </Drawer.Navigator>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: 'fex',
+    display: 'flex',
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
