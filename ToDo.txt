@@ -10,9 +10,9 @@ X Text
 - FlatList or ScrollView
 - Button
 - Pressable
-- SafeAreaView
+X SafeAreaView
 - KeyboardAvoidingView
-- StatusBar
+X StatusBar
 - TextInput
 - ActivityIndicator
 
