@@ -1,23 +1,59 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
+  TextInput
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
+import { FlatList } from 'react-native-gesture-handler'
 
-export default function HomeScreen ({ navigation }) {
+export default function HomeScreen (props) {
+  //
+  //Initial search to find phone model
+  function searchPhones () {
+    props.setIsRefreshing(true)
+    console.log(`Searched for:${props.phoneModel}`)
+    let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
+    fetch(url)
+      .then(resp => {
+        if (!resp.ok) throw new Error(resp.json())
+        return resp.json()
+      })
+      .then(data => {
+        console.log(`data from search results:${data.data.phones}`)
+        props.setIsRefreshing(false)
+        props.setPhoneResults(data.data.phones)
+      })
+      .catch(err => {
+        props.setIsRefreshing(false)
+        alert(`Invalid search query, please try again.`)
+      })
+  }
+
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+      {/* Landing screen (top half) */}
       <View>
         <StatusBar style='auto' />
 
-        <Text>HomeScreen</Text>
-        <Button
-          onPress={() => navigation.navigate('Details')}
-          title='Go to Phone'
+        <Text>Phone Database</Text>
+        <Text>
+          Search for any smartphone for its details and specifications
+        </Text>
+        <TextInput
+          onChangeText={props.setPhoneModel}
+          placeholder={`Try, "iPhone 12"`}
+          placeholderTextColor='#616264'
+          clearButtonMode='while-editing'
         />
-        <Button
-          onPress={() => navigation.navigate('Favorites')}
-          title='Go to Favorites'
-        />
+        <Button title='Search phones' onPress={searchPhones} />
       </View>
+
+      {/* Search results (bottom half) */}
+      <FlatList />
     </SafeAreaView>
   )
 }
