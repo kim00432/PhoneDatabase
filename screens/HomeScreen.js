@@ -105,8 +105,8 @@ function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
       // }}
       onPress={ev => {
         setPhoneURL(`${device.item.detail}`)
+        // console.log(phoneURL)
         navigation.navigate('Details')
-        console.log(phoneURL)
       }}
     >
       <View>
