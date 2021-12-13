@@ -5,7 +5,9 @@ import {
   View,
   Button,
   SafeAreaView,
-  TextInput
+  TextInput,
+  Pressable,
+  Image
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
@@ -13,14 +15,21 @@ import { FlatList } from 'react-native-gesture-handler'
 import { usePhonesDetails } from '../context/PhonesContext'
 
 export default function HomeScreen (props) {
-  const [phoneModel, setPhoneModel] = usePhonesDetails()
+  const [
+    phoneModel,
+    setPhoneModel,
+    phoneResults,
+    setPhoneResults,
+    phoneURL,
+    setPhoneURL
+  ] = usePhonesDetails()
 
   //
   //Initial search to find phone model
   function searchPhones () {
     // props.setIsRefreshing(true)
-    console.log(`Searched for:${props.phoneModel}`)
-    let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
+    console.log(`Searched for:${phoneModel}`)
+    let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${phoneModel}`
     fetch(url)
       .then(resp => {
         if (!resp.ok) throw new Error(resp.json())
@@ -28,11 +37,11 @@ export default function HomeScreen (props) {
       })
       .then(data => {
         console.log(`data from search results:${data.data.phones}`)
-        props.setIsRefreshing(false)
-        props.setPhoneResults(data.data.phones)
+        // props.setIsRefreshing(false)
+        setPhoneResults(data.data.phones)
       })
       .catch(err => {
-        props.setIsRefreshing(false)
+        // props.setIsRefreshing(false)
         alert(`Invalid search query, please try again.`)
       })
   }
@@ -48,21 +57,67 @@ export default function HomeScreen (props) {
           Search for any smartphone for its details and specifications
         </Text>
         <TextInput
-          onChangeText={props.setPhoneModel}
+          onChangeText={setPhoneModel}
           placeholder={`Try, "iPhone 12"`}
           placeholderTextColor='#616264'
           clearButtonMode='while-editing'
         />
         <Button title='Search phones' onPress={searchPhones} />
-        <Button
+        {/* <Button
           title='Go to details'
           onPress={() => props.navigation.navigate('Details')}
-        />
+        /> */}
       </View>
 
       {/* Search results (bottom half) */}
-      <FlatList />
+      <FlatList
+        ListHeaderComponent={<View style={{ paddingVertical: 0 }}></View>}
+        ListFooterComponent={<View style={{ paddingVertical: 8 }}></View>}
+        data={phoneResults}
+        renderItem={phone => (
+          <Phone
+            device={phone}
+            navigation={props.navigation}
+            setPhoneURL={props.setPhoneURL}
+          />
+        )}
+        // refreshing={props.isRefreshing}
+        // onRefresh={() => {
+        //   props.setIsRefreshing(true)
+        //   searchPhones()
+        // }}
+        keyExtractor={(item, index) => {
+          return item.phone_name + '-' + index
+        }}
+      />
     </SafeAreaView>
+  )
+}
+
+function Phone ({ device, navigation, setPhoneURL }) {
+  console.log(device.item.url)
+  return (
+    <Pressable
+      onPress={ev => {
+        setPhoneURL(`${device.item.detail}`)
+        navigation.navigate('PhoneDetails')
+      }}
+    >
+      <View>
+        <Image
+          style={{
+            width: 80,
+            height: 105,
+            margin: 8
+          }}
+          source={{ uri: `${device.item.image}` }}
+        />
+        <View>
+          <Text>{device.item.brand}</Text>
+          <Text>{device.item.phone_name}</Text>
+        </View>
+      </View>
+    </Pressable>
   )
 }
 
