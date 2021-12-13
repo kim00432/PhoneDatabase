@@ -77,8 +77,9 @@ export default function HomeScreen (props) {
         renderItem={phone => (
           <Phone
             device={phone}
+            setPhoneURL={setPhoneURL}
+            phoneURL={phoneURL}
             navigation={props.navigation}
-            setPhoneURL={props.setPhoneURL}
           />
         )}
         // refreshing={props.isRefreshing}
@@ -94,13 +95,18 @@ export default function HomeScreen (props) {
   )
 }
 
-function Phone ({ device, navigation, setPhoneURL }) {
-  console.log(device.item.url)
+function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
+  // console.log(device.item.url)
   return (
     <Pressable
+      // onPress={ev => {
+      //   setPhoneURL(`${device.item.detail}`)
+      //   console.log(`Clicked on phone: ${phoneURL}`)
+      //   navigation.navigate('PhoneDetails')
+      // }}
       onPress={ev => {
         setPhoneURL(`${device.item.detail}`)
-        navigation.navigate('PhoneDetails')
+        navigation.navigate('Details')
       }}
     >
       <View>
