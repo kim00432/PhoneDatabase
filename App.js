@@ -14,8 +14,6 @@ import { PhonesProvider } from './context/PhonesContext'
 
 //root navigator - Drawer Navigator
 export default function App () {
-  const Drawer = createDrawerNavigator()
-  // const navigation = useNavigation()
   return (
     <PhonesProvider>
       <AppContainer />

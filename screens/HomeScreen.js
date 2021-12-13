@@ -10,10 +10,10 @@ import {
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
 
-// import { usePhonesDetails } from '../context/PhonesContext'
+import { usePhonesDetails } from '../context/PhonesContext'
 
 export default function HomeScreen (props) {
-  // const [phoneModel, setPhoneModel] = usePhonesDetails()
+  const [phoneModel, setPhoneModel] = usePhonesDetails()
 
   //
   //Initial search to find phone model
@@ -58,7 +58,6 @@ export default function HomeScreen (props) {
           title='Go to details'
           onPress={() => props.navigation.navigate('Details')}
         />
-        <Button title='Set context' onPress={() => setPhoneModel('hello')} />
       </View>
 
       {/* Search results (bottom half) */}
