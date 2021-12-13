@@ -2,20 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import {
-  NavigationContainer,
-  DefaultTheme,
-  useNavigation,
-  DrawerActions
-} from '@react-navigation/native'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Pressable,
-  SafeAreaView
-} from 'react-native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import { Pressable } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Sidebar from './customDrawer'
@@ -28,7 +16,7 @@ export default function App () {
   const Drawer = createDrawerNavigator()
   // const navigation = useNavigation()
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={DrawerTheme}>
       <Drawer.Navigator
         initialRouteName='Home'
         drawerContent={props => <Sidebar {...props} />}
@@ -53,8 +41,36 @@ export default function App () {
           overlayColor: '#00000033'
         })}
       >
-        <Drawer.Screen name='Home' component={HomeStackNav} />
-        <Drawer.Screen name='Favorites' component={Favorites} />
+        <Drawer.Screen
+          name='Home'
+          component={HomeStackNav}
+          options={{
+            drawerIcon: ({ focused, color, size }) => {
+              if (focused) {
+                return <Ionicons name='md-home' size={size} color={color} />
+              } else {
+                return (
+                  <Ionicons name='md-home-outline' size={size} color={color} />
+                )
+              }
+            }
+          }}
+        />
+        <Drawer.Screen
+          name='Favorites'
+          component={Favorites}
+          options={{
+            drawerIcon: ({ focused, color, size }) => {
+              if (focused) {
+                return <Ionicons name='heart-sharp' size={size} color={color} />
+              } else {
+                return (
+                  <Ionicons name='heart-outline' size={size} color={color} />
+                )
+              }
+            }
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   )
@@ -77,4 +93,13 @@ function HomeStackNav () {
       />
     </Stack.Navigator>
   )
+}
+
+/* Editing default drawer theme */
+const DrawerTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'rgb(255, 255, 255)'
+  }
 }
