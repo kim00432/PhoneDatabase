@@ -14,23 +14,23 @@ export default function HomeScreen (props) {
   //
   //Initial search to find phone model
   function searchPhones () {
-    props.setIsRefreshing(true)
-    console.log(`Searched for:${props.phoneModel}`)
-    let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
-    fetch(url)
-      .then(resp => {
-        if (!resp.ok) throw new Error(resp.json())
-        return resp.json()
-      })
-      .then(data => {
-        console.log(`data from search results:${data.data.phones}`)
-        props.setIsRefreshing(false)
-        props.setPhoneResults(data.data.phones)
-      })
-      .catch(err => {
-        props.setIsRefreshing(false)
-        alert(`Invalid search query, please try again.`)
-      })
+    // props.setIsRefreshing(true)
+    // console.log(`Searched for:${props.phoneModel}`)
+    // let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
+    // fetch(url)
+    //   .then(resp => {
+    //     if (!resp.ok) throw new Error(resp.json())
+    //     return resp.json()
+    //   })
+    //   .then(data => {
+    //     console.log(`data from search results:${data.data.phones}`)
+    //     props.setIsRefreshing(false)
+    //     props.setPhoneResults(data.data.phones)
+    //   })
+    //   .catch(err => {
+    //     props.setIsRefreshing(false)
+    //     alert(`Invalid search query, please try again.`)
+    //   })
   }
 
   return (
@@ -50,6 +50,10 @@ export default function HomeScreen (props) {
           clearButtonMode='while-editing'
         />
         <Button title='Search phones' onPress={searchPhones} />
+        <Button
+          title='Go to details'
+          onPress={() => props.navigation.navigate('Details')}
+        />
       </View>
 
       {/* Search results (bottom half) */}
