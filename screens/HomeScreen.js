@@ -10,27 +10,31 @@ import {
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
 
+// import { usePhonesDetails } from '../context/PhonesContext'
+
 export default function HomeScreen (props) {
+  // const [phoneModel, setPhoneModel] = usePhonesDetails()
+
   //
   //Initial search to find phone model
   function searchPhones () {
     // props.setIsRefreshing(true)
-    // console.log(`Searched for:${props.phoneModel}`)
-    // let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
-    // fetch(url)
-    //   .then(resp => {
-    //     if (!resp.ok) throw new Error(resp.json())
-    //     return resp.json()
-    //   })
-    //   .then(data => {
-    //     console.log(`data from search results:${data.data.phones}`)
-    //     props.setIsRefreshing(false)
-    //     props.setPhoneResults(data.data.phones)
-    //   })
-    //   .catch(err => {
-    //     props.setIsRefreshing(false)
-    //     alert(`Invalid search query, please try again.`)
-    //   })
+    console.log(`Searched for:${props.phoneModel}`)
+    let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${props.phoneModel}`
+    fetch(url)
+      .then(resp => {
+        if (!resp.ok) throw new Error(resp.json())
+        return resp.json()
+      })
+      .then(data => {
+        console.log(`data from search results:${data.data.phones}`)
+        props.setIsRefreshing(false)
+        props.setPhoneResults(data.data.phones)
+      })
+      .catch(err => {
+        props.setIsRefreshing(false)
+        alert(`Invalid search query, please try again.`)
+      })
   }
 
   return (
@@ -54,6 +58,7 @@ export default function HomeScreen (props) {
           title='Go to details'
           onPress={() => props.navigation.navigate('Details')}
         />
+        <Button title='Set context' onPress={() => setPhoneModel('hello')} />
       </View>
 
       {/* Search results (bottom half) */}

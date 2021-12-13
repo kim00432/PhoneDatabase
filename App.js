@@ -10,8 +10,20 @@ import HomeScreen from './screens/HomeScreen'
 import Details from './screens/Details'
 import Favorites from './screens/Favorites'
 
+import { PhonesProvider } from './context/PhonesContext'
+
 //root navigator - Drawer Navigator
 export default function App () {
+  const Drawer = createDrawerNavigator()
+  // const navigation = useNavigation()
+  return (
+    <PhonesProvider>
+      <AppContainer />
+    </PhonesProvider>
+  )
+}
+
+function AppContainer () {
   const Drawer = createDrawerNavigator()
   // const navigation = useNavigation()
   return (
