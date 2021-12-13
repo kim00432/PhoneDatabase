@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
@@ -7,26 +7,25 @@ export default function Details ({ navigation }) {
   const [phoneURL] = usePhonesDetails()
   console.log(phoneURL)
 
-  const [data, setData] = useState([])
+  // const [data, setData] = useState([])
 
-  function phoneDetails() {
-    let url = phoneURL
-    fetch(url)
-      .then(resp => {
-        if (!resp.ok) throw new Error(resp.json())
-        return resp.json()
-      })
-      .then(data => {
-        console.log(data)
-      })
-      .catch(err => {
-        console.error(err.message)
-      })
-  }
+  // function phoneDetails() {
+  //   fetch(phoneURL)
+  //     .then(resp => {
+  //       if (!resp.ok) throw new Error(resp.json())
+  //       return resp.json()
+  //     })
+  //     .then(data => {
+  //       console.log(data)
+  //     })
+  //     .catch(err => {
+  //       console.error(err.message)
+  //     })
+  // }
 
-  useEffect(() => {
-    setData(phoneDetails)
-  })
+  // useEffect(() => {
+  //   setData(phoneDetails)
+  // })
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       <View>
