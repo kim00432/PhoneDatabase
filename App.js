@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
