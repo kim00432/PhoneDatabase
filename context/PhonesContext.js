@@ -21,8 +21,8 @@ function PhonesProvider (props) {
 
   return (
     <PhonesContext.Provider
-      value={
-        (phoneModel,
+      value={[
+        phoneModel,
         setPhoneModel,
         phoneResults,
         setPhoneResults,
@@ -31,8 +31,8 @@ function PhonesProvider (props) {
         phoneDetails,
         setPhoneDetails,
         isRefreshing,
-        setIsRefreshing)
-      }
+        setIsRefreshing
+      ]}
       {...props}
     />
   )
@@ -44,4 +44,4 @@ function usePhonesDetails () {
   return context //all state data and functions
 }
 
-export /* all state data and functions */{}
+export { usePhonesDetails, PhonesProvider }
