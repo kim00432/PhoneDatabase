@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, SafeAreaView, Image, FlatList, ListViewBase } from 'react-native'
+import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, FlatList, ListViewBase } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 
@@ -47,9 +47,8 @@ export default function Details ({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <View>
+             <ScrollView>
         <StatusBar style='auto' />
-        <View>
           {/* <Image style={styles.image} source={{uri: `${phoneDetails.thumbnail}`}}/> */}
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
@@ -64,14 +63,12 @@ export default function Details ({ navigation }) {
           <Text>OS: {phoneDetails.os}</Text>
           <Text>Storage: {phoneDetails.storage}</Text>
           <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
-         
-        </View>
+          </ScrollView>
         {/* <Button onPress={() => navigation.goBack()} title='Go back home' /> */}
         <Button
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-      </View>
     </SafeAreaView>
   )
 }
