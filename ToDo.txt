@@ -19,7 +19,7 @@ X TextInput
 
 # 3 React Native APIs
 
-- Alert or Prompt
+X Alert or Prompt
 X StyleSheet
 - Keyboard or Platform
 

@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   TextInput,
   Pressable,
-  Image
+  Image,
+  Alert
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
@@ -47,7 +48,15 @@ export default function HomeScreen (props) {
       })
       .catch(err => {
         setIsRefreshing(false)
-        alert(`Invalid search query, please try again.`)
+        Alert.alert(
+          'Error',
+          'You have either entered an invalid search query or the server did not respond, please try again.',
+          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+          {
+            cancelable: true,
+            onDismiss: () => Alert.alert('Alert dismissed.')
+          }
+        )
       })
   }
 
