@@ -130,7 +130,6 @@ export default function HomeScreen (props) {
 }
 
 function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
-  // console.log(device.item.url)
   return (
     <Pressable
       // onPress={ev => {
@@ -140,6 +139,7 @@ function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
       // }}
       onPress={ev => {
         setPhoneURL(`${device.item.detail}`)
+        // console.log(phoneURL)
         navigation.navigate('Details')
       }}
     >

@@ -12,7 +12,7 @@ function PhonesProvider (props) {
   const [phoneResults, setPhoneResults] = useState([])
 
   // selected phone from list of results -> url that fetches specific phone's details
-  const [phoneURL, setPhoneURL] = useState([])
+  const [phoneURL, setPhoneURL] = useState(null)
 
   // received data from fetch of specific phone's details
   const [phoneDetails, setPhoneDetails] = useState([])
