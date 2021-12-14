@@ -40,9 +40,9 @@ export default function HomeScreen (props) {
         // props.setIsRefreshing(false)
         setPhoneResults(data.data.phones)
       })
-      .catch(err => {
+      .catch(({ err }) => {
         // props.setIsRefreshing(false)
-        alert(`Invalid search query, please try again.`)
+        alert(`Error: ${err}`)
       })
   }
 
