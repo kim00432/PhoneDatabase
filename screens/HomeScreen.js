@@ -9,10 +9,10 @@ import {
   Pressable,
   Image,
   Alert,
-  Keyboard
+  Keyboard,
+  FlatList
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { FlatList } from 'react-native-gesture-handler'
 
 import { usePhonesDetails } from '../context/PhonesContext'
 
