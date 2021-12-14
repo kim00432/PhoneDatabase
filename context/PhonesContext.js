@@ -1,10 +1,13 @@
 import React from 'react'
 import { createContext, useContext } from 'react'
 import { useState } from 'react'
+import useAsyncStorage from '../hooks/useAsyncStorage'
 
 const PhonesContext = createContext()
 
 function PhonesProvider (props) {
+  // * * state data * * //
+
   // search query
   const [phoneModel, setPhoneModel] = useState('iPhone 12')
 
@@ -17,6 +20,28 @@ function PhonesProvider (props) {
   // received data from fetch of specific phone's details
   const [phoneDetails, setPhoneDetails] = useState([])
 
+  // * * AsyncStorage * * //
+
+  //useAsyncStorage custom hook functions
+  const [favoritesList, setFavoritesList] = useAsyncStorage('yoona-jc')
+
+  //get all favorites
+  function getFavorites () {
+    return favoritesList
+  }
+
+  //add to favorites
+  function addToFavorites (obj) {
+    console.log(`received properties, creating item '${obj}'`)
+    let updatedFavorites = favoritesList.map(a => ({ ...a }))
+    updatedFavorites.push(obj)
+    console.log(`Updated favoritesList, now pushing to storage.`)
+    setFavoritesList(updatedFavorites)
+  }
+
+  //delete from favorites
+  function deleteFromFavorites () {}
+
   return (
     <PhonesContext.Provider
       value={[
@@ -27,7 +52,10 @@ function PhonesProvider (props) {
         phoneURL,
         setPhoneURL,
         phoneDetails,
-        setPhoneDetails
+        setPhoneDetails,
+        getFavorites,
+        addToFavorites,
+        deleteFromFavorites
       ]}
       {...props}
     />
