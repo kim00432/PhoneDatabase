@@ -6,22 +6,22 @@
 
 X View
 X Text
-- Image
-- FlatList or ScrollView
-- Button
-- Pressable
+X Image
+X FlatList or ScrollView
+X Button
+X Pressable
 X SafeAreaView
 - KeyboardAvoidingView
 X StatusBar
-- TextInput
+X TextInput
 - ActivityIndicator
 
 
 # 3 React Native APIs
 
-- Alert or Prompt
+X Alert or Prompt
 X StyleSheet
-- Keyboard or Platform
+X Keyboard or Platform
 
 
 # 4 Expo Components/APIs

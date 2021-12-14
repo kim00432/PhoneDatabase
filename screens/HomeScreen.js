@@ -7,7 +7,9 @@ import {
   SafeAreaView,
   TextInput,
   Pressable,
-  Image
+  Image,
+  Alert,
+  Keyboard
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
@@ -21,13 +23,17 @@ export default function HomeScreen (props) {
     phoneResults,
     setPhoneResults,
     phoneURL,
-    setPhoneURL
+    setPhoneURL,
+    phoneDetails,
+    setPhoneDetails,
+    isRefreshing,
+    setIsRefreshing
   ] = usePhonesDetails()
 
-  //
   //Initial search to find phone model
   function searchPhones () {
-    // props.setIsRefreshing(true)
+    setIsRefreshing(true)
+
     console.log(`Searched for:${phoneModel}`)
     let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${phoneModel}`
     fetch(url)
@@ -37,12 +43,20 @@ export default function HomeScreen (props) {
       })
       .then(data => {
         console.log(`data from search results:${data.data.phones}`)
-        // props.setIsRefreshing(false)
+        setIsRefreshing(false)
         setPhoneResults(data.data.phones)
       })
-      .catch(({ err }) => {
-        // props.setIsRefreshing(false)
-        alert(`Error: ${err}`)
+      .catch(err => {
+        setIsRefreshing(false)
+        Alert.alert(
+          'Error',
+          'You have either entered an invalid search query or the server did not respond, please try again.',
+          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+          {
+            cancelable: true,
+            onDismiss: () => Alert.alert('Alert dismissed.')
+          }
+        )
       })
   }
 
@@ -58,11 +72,22 @@ export default function HomeScreen (props) {
         </Text>
         <TextInput
           onChangeText={setPhoneModel}
+          onSubmitEditing={() => {
+            searchPhones()
+            Keyboard.dismiss()
+          }}
           placeholder={`Try, "iPhone 12"`}
           placeholderTextColor='#616264'
           clearButtonMode='while-editing'
+          returnKeyType='search'
         />
-        <Button title='Search phones' onPress={searchPhones} />
+        <Button
+          title='Search phones'
+          onPress={() => {
+            searchPhones()
+            Keyboard.dismiss()
+          }}
+        />
         {/* <Button
           title='Go to details'
           onPress={() => props.navigation.navigate('Details')}
@@ -70,27 +95,36 @@ export default function HomeScreen (props) {
       </View>
 
       {/* Search results (bottom half) */}
-      <FlatList
-        ListHeaderComponent={<View style={{ paddingVertical: 0 }}></View>}
-        ListFooterComponent={<View style={{ paddingVertical: 8 }}></View>}
-        data={phoneResults}
-        renderItem={phone => (
-          <Phone
-            device={phone}
-            setPhoneURL={setPhoneURL}
-            phoneURL={phoneURL}
-            navigation={props.navigation}
-          />
-        )}
-        // refreshing={props.isRefreshing}
-        // onRefresh={() => {
-        //   props.setIsRefreshing(true)
-        //   searchPhones()
-        // }}
-        keyExtractor={(item, index) => {
-          return item.phone_name + '-' + index
-        }}
-      />
+      <View style={styles.container}>
+        <FlatList
+          ListHeaderComponent={
+            <View
+              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
+            ></View>
+          }
+          ListFooterComponent={
+            <View
+              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
+            ></View>
+          }
+          data={phoneResults}
+          renderItem={phone => (
+            <Phone
+              device={phone}
+              setPhoneURL={setPhoneURL}
+              phoneURL={phoneURL}
+              navigation={props.navigation}
+            />
+          )}
+          keyExtractor={(item, index) => {
+            return item.phone_name + '-' + index
+          }}
+          refreshing={isRefreshing}
+          onRefresh={() => {
+            searchPhones()
+          }}
+        />
+      </View>
     </SafeAreaView>
   )
 }
