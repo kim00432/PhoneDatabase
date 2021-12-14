@@ -8,7 +8,8 @@ import {
   TextInput,
   Pressable,
   Image,
-  Alert
+  Alert,
+  Keyboard
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { FlatList } from 'react-native-gesture-handler'
@@ -29,7 +30,6 @@ export default function HomeScreen (props) {
     setIsRefreshing
   ] = usePhonesDetails()
 
-  //
   //Initial search to find phone model
   function searchPhones () {
     setIsRefreshing(true)
@@ -72,11 +72,22 @@ export default function HomeScreen (props) {
         </Text>
         <TextInput
           onChangeText={setPhoneModel}
+          onSubmitEditing={() => {
+            searchPhones()
+            Keyboard.dismiss()
+          }}
           placeholder={`Try, "iPhone 12"`}
           placeholderTextColor='#616264'
           clearButtonMode='while-editing'
+          returnKeyType='search'
         />
-        <Button title='Search phones' onPress={searchPhones} />
+        <Button
+          title='Search phones'
+          onPress={() => {
+            searchPhones()
+            Keyboard.dismiss()
+          }}
+        />
         {/* <Button
           title='Go to details'
           onPress={() => props.navigation.navigate('Details')}
