@@ -17,9 +17,6 @@ function PhonesProvider (props) {
   // received data from fetch of specific phone's details
   const [phoneDetails, setPhoneDetails] = useState([])
 
-  // refreshing state
-  const [isRefreshing, setIsRefreshing] = useState(false)
-
   return (
     <PhonesContext.Provider
       value={[
@@ -30,9 +27,7 @@ function PhonesProvider (props) {
         phoneURL,
         setPhoneURL,
         phoneDetails,
-        setPhoneDetails,
-        isRefreshing,
-        setIsRefreshing
+        setPhoneDetails
       ]}
       {...props}
     />
