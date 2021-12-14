@@ -47,9 +47,12 @@ export default function Details ({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-             <ScrollView>
+      <ScrollView>
         <StatusBar style='auto' />
-          {/* <Image style={styles.image} source={{uri: `${phoneDetails.thumbnail}`}}/> */}
+        <Button
+          title='Go back'
+          onPress={() => navigation.navigate('HomeScreen')}
+        />
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
@@ -64,11 +67,6 @@ export default function Details ({ navigation }) {
           <Text>Storage: {phoneDetails.storage}</Text>
           <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
           </ScrollView>
-        {/* <Button onPress={() => navigation.goBack()} title='Go back home' /> */}
-        <Button
-          title='Go back'
-          onPress={() => navigation.navigate('HomeScreen')}
-        />
     </SafeAreaView>
   )
 }
