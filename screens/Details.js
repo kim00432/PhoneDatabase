@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, SafeAreaView, Image } from 'react-native'
+import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, FlatList, ListViewBase } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 
@@ -15,6 +15,9 @@ export default function Details ({ navigation }) {
     setPhoneDetails
   ] = usePhonesDetails()
 
+  const [specifications, setSpecifications] = useState([])
+
+
   console.log(`phone url: ${phoneURL}`)
 
   function getDetails (url) {
@@ -25,6 +28,8 @@ export default function Details ({ navigation }) {
       })
       .then(data => {
         setPhoneDetails(data.data)
+        console.log("Fetch details data")
+        setSpecifications(data.data.specifications)
       })
       .catch(err => {
         console.error(err.message)
@@ -35,23 +40,33 @@ export default function Details ({ navigation }) {
     getDetails(phoneURL)
   }, [])
 
-  // console.log(phoneDetail)
+
+
+  if(specifications.length === 0)  {return <Text>No data here yet....</Text>}
+  console.log(specifications)
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <View>
+      <ScrollView>
         <StatusBar style='auto' />
-        <View>
-          <Image style={styles.image} source={{uri: `${phoneDetails.thumbnail}`}}/>
-          <Text>{phoneDetails.brand} {phoneDetails.phone_name}</Text>
-          <Text>{phoneDetails.release_date}</Text>
-        </View>
-        {/* <Button onPress={() => navigation.goBack()} title='Go back home' /> */}
         <Button
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-      </View>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[3]}`}}/>
+          <Text>{phoneDetails.brand} {phoneDetails.phone_name}</Text>
+          <Text>{specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}</Text>
+          <Text>{specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}</Text>
+          <Text>{specifications[12].specs[0].key} : {specifications[12].specs[0].val[0]}</Text>
+          <Text>Dimension: {phoneDetails.dimension}</Text>
+          <Text>{specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}</Text>
+          <Text>OS: {phoneDetails.os}</Text>
+          <Text>Storage: {phoneDetails.storage}</Text>
+          <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
+          </ScrollView>
     </SafeAreaView>
   )
 }
