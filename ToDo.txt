@@ -6,14 +6,14 @@
 
 X View
 X Text
-- Image
-- FlatList or ScrollView
-- Button
-- Pressable
+X Image
+X FlatList or ScrollView
+X Button
+X Pressable
 X SafeAreaView
 - KeyboardAvoidingView
 X StatusBar
-- TextInput
+X TextInput
 - ActivityIndicator
 
 
