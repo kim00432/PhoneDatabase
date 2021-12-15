@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, View, TouchableOpacity, FlatList, ListViewBase } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  Button,
+  SafeAreaView,
+  Image,
+  FlatList,
+  ListViewBase
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
@@ -12,7 +21,7 @@ export default function Details ({ navigation }) {
     setPhoneResults,
     phoneURL,
     setPhoneURL,
-    phoneDetails, 
+    phoneDetails,
     setPhoneDetails
   ] = usePhonesDetails()
 
@@ -32,7 +41,7 @@ export default function Details ({ navigation }) {
       })
       .then(data => {
         setPhoneDetails(data.data)
-        console.log("Fetch details data")
+        console.log('Fetch details data')
         setSpecifications(data.data.specifications)
       })
       .catch(err => {
@@ -40,14 +49,14 @@ export default function Details ({ navigation }) {
       })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getDetails(phoneURL)
   }, [])
 
-
-
-  if(specifications.length === 0)  {return <Text>No data here yet....</Text>}
-  console.log(specifications)
+  if (specifications.length === 0) {
+    return <Text>No data here yet....</Text>
+  }
+  // console.log(specifications)
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
@@ -73,11 +82,10 @@ export default function Details ({ navigation }) {
           <Text>OS: {phoneDetails.os}</Text>
           <Text>Storage: {phoneDetails.storage}</Text>
           <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
-        </ScrollView>
-    </SafeAreaView>
+    </ScrollView>
+  </SafeAreaView>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -91,8 +99,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     resizeMode: 'contain',
-    marginHorizontal: 5, 
+    marginHorizontal: 5,
     borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden'
   }
 })

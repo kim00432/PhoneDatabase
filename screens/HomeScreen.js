@@ -12,11 +12,13 @@ import {
   Keyboard,
   FlatList
 } from 'react-native'
+import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 
 import { usePhonesDetails } from '../context/PhonesContext'
 
 export default function HomeScreen (props) {
+  //PhoneContext state data
   const [
     phoneModel,
     setPhoneModel,
@@ -25,10 +27,10 @@ export default function HomeScreen (props) {
     phoneURL,
     setPhoneURL,
     phoneDetails,
-    setPhoneDetails,
-    isRefreshing,
-    setIsRefreshing
+    setPhoneDetails
   ] = usePhonesDetails()
+  //refreshing state
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   //Initial search to find phone model
   function searchPhones () {
@@ -132,11 +134,6 @@ export default function HomeScreen (props) {
 function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
   return (
     <Pressable
-      // onPress={ev => {
-      //   setPhoneURL(`${device.item.detail}`)
-      //   console.log(`Clicked on phone: ${phoneURL}`)
-      //   navigation.navigate('PhoneDetails')
-      // }}
       onPress={ev => {
         setPhoneURL(`${device.item.detail}`)
         // console.log(phoneURL)
