@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   Image,
   FlatList,
-  ListViewBase
+  ListViewBase,
+  TouchableOpacity
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
@@ -22,7 +23,10 @@ export default function Details ({ navigation }) {
     phoneURL,
     setPhoneURL,
     phoneDetails,
-    setPhoneDetails
+    setPhoneDetails,
+    getFavorites,
+    addToFavorites,
+    deleteFromFavorites
   ] = usePhonesDetails()
 
   const [specifications, setSpecifications] = useState([])
@@ -69,6 +73,16 @@ export default function Details ({ navigation }) {
         <TouchableOpacity onPress={copyToClipboard}>
           <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>Copy URL</Text>
         </TouchableOpacity>
+        <Button
+          title='Save Item'
+          onPress={() =>
+            addToFavorites({
+              brand: phoneDetails.brand,
+              phone_name: phoneDetails.phone_name,
+              detail: phoneURL
+            })
+          }
+        />
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
