@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { Pressable } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import * as Font from 'expo-font'
+import AppLoading from 'expo-app-loading'
 
 import Sidebar from './customDrawer'
 import HomeScreen from './screens/HomeScreen'
@@ -12,15 +14,37 @@ import Favorites from './screens/Favorites'
 
 import { PhonesProvider } from './context/PhonesContext'
 
-//root navigator - Drawer Navigator
+const getFonts = () =>
+  Font.loadAsync({
+    Regular: require('./assets/fonts/Nunito-Regular.ttf')
+  })
+
 export default function App () {
-  return (
-    <PhonesProvider>
-      <AppContainer />
-    </PhonesProvider>
-  )
+  const [fontsLoaded, setFontsLoaded] = useState(false)
+
+  if (fontsLoaded) {
+    return (
+      <PhonesProvider>
+        <AppContainer />
+      </PhonesProvider>
+    )
+  } else {
+    return (
+      <AppLoading
+        startAsync={getFonts}
+        onFinish={() =>
+          // setting timeout for 2 seconds so that we can actually see the splashscreen
+          setTimeout(() => {
+            setFontsLoaded(true)
+          }, 2000)
+        }
+        onError={console.warn}
+      />
+    )
+  }
 }
 
+//root navigator - Drawer Navigator
 function AppContainer () {
   const Drawer = createDrawerNavigator()
   // const navigation = useNavigation()

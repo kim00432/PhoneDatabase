@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, FlatList, ListViewBase } from 'react-native'
+import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, View, TouchableOpacity, FlatList, ListViewBase } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
+import * as Clipboard from 'expo-clipboard'
 
 export default function Details ({ navigation }) {
   const [
@@ -17,6 +18,9 @@ export default function Details ({ navigation }) {
 
   const [specifications, setSpecifications] = useState([])
 
+  const copyToClipboard = () => {
+    Clipboard.setString(phoneURL)
+  }
 
   console.log(`phone url: ${phoneURL}`)
 
@@ -53,6 +57,9 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
+        <TouchableOpacity onPress={copyToClipboard}>
+          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>Copy URL</Text>
+        </TouchableOpacity>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
@@ -66,7 +73,7 @@ export default function Details ({ navigation }) {
           <Text>OS: {phoneDetails.os}</Text>
           <Text>Storage: {phoneDetails.storage}</Text>
           <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
-          </ScrollView>
+        </ScrollView>
     </SafeAreaView>
   )
 }

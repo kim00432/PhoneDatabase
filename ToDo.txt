@@ -26,9 +26,9 @@ X Keyboard or Platform
 
 # 4 Expo Components/APIs
 
-- AppLoading
-- Clipboard
-- Font
+X AppLoading
+X Clipboard
+X Font
 - ???
 
 # # ------------------------------------------ # #
