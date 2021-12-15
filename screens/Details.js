@@ -58,7 +58,7 @@ export default function Details ({ navigation }) {
           onPress={() => navigation.navigate('HomeScreen')}
         />
         <TouchableOpacity onPress={copyToClipboard}>
-          <Text>Copy URL</Text>
+          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>Copy URL</Text>
         </TouchableOpacity>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
           <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
