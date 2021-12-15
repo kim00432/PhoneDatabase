@@ -23,7 +23,8 @@ export default function Favorites ({ navigation }) {
   useEffect(() => {
     let fetchedData = getFavorites()
     setData(fetchedData)
-  }, [])
+    console.log('fetched data put into state')
+  }, [data])
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
