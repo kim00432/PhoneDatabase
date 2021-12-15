@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
@@ -14,26 +14,37 @@ import Favorites from './screens/Favorites'
 
 import { PhonesProvider } from './context/PhonesContext'
 
-const getFonts = () => 
+const getFonts = () =>
   Font.loadAsync({
-    'Regular': require('./assets/fonts/Nunito-Regular.ttf'),
+    Regular: require('./assets/fonts/Nunito-Regular.ttf')
   })
 
-//root navigator - Drawer Navigator
 export default function App () {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  
+  const [fontsLoaded, setFontsLoaded] = useState(false)
+
   if (fontsLoaded) {
-    return  (
-    <PhonesProvider>
-      <AppContainer />
-    </PhonesProvider> )
-  } else { 
     return (
-    <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)}  onError={console.warn}/>
-  )}
+      <PhonesProvider>
+        <AppContainer />
+      </PhonesProvider>
+    )
+  } else {
+    return (
+      <AppLoading
+        startAsync={getFonts}
+        onFinish={() =>
+          // setting timeout for 2 seconds so that we can actually see the splashscreen
+          setTimeout(() => {
+            setFontsLoaded(true)
+          }, 2000)
+        }
+        onError={console.warn}
+      />
+    )
+  }
 }
 
+//root navigator - Drawer Navigator
 function AppContainer () {
   const Drawer = createDrawerNavigator()
   // const navigation = useNavigation()
