@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, ScrollView, Button, SafeAreaView, Image, FlatList, ListViewBase } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  Button,
+  SafeAreaView,
+  Image,
+  FlatList,
+  ListViewBase
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 
@@ -11,12 +20,11 @@ export default function Details ({ navigation }) {
     setPhoneResults,
     phoneURL,
     setPhoneURL,
-    phoneDetails, 
+    phoneDetails,
     setPhoneDetails
   ] = usePhonesDetails()
 
   const [specifications, setSpecifications] = useState([])
-
 
   console.log(`phone url: ${phoneURL}`)
 
@@ -28,7 +36,7 @@ export default function Details ({ navigation }) {
       })
       .then(data => {
         setPhoneDetails(data.data)
-        console.log("Fetch details data")
+        console.log('Fetch details data')
         setSpecifications(data.data.specifications)
       })
       .catch(err => {
@@ -36,14 +44,14 @@ export default function Details ({ navigation }) {
       })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getDetails(phoneURL)
   }, [])
 
-
-
-  if(specifications.length === 0)  {return <Text>No data here yet....</Text>}
-  console.log(specifications)
+  if (specifications.length === 0) {
+    return <Text>No data here yet....</Text>
+  }
+  // console.log(specifications)
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
@@ -53,24 +61,48 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
-          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
-          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
-          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[3]}`}}/>
-          <Text>{phoneDetails.brand} {phoneDetails.phone_name}</Text>
-          <Text>{specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}</Text>
-          <Text>{specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}</Text>
-          <Text>{specifications[12].specs[0].key} : {specifications[12].specs[0].val[0]}</Text>
-          <Text>Dimension: {phoneDetails.dimension}</Text>
-          <Text>{specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}</Text>
-          <Text>OS: {phoneDetails.os}</Text>
-          <Text>Storage: {phoneDetails.storage}</Text>
-          <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
-          </ScrollView>
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[0]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[1]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[2]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[3]}` }}
+        />
+        <Text>
+          {phoneDetails.brand} {phoneDetails.phone_name}
+        </Text>
+        <Text>
+          {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
+        </Text>
+        <Text>
+          {specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}
+        </Text>
+        <Text>
+          {specifications[12].specs[0].key} :{' '}
+          {specifications[12].specs[0].val[0]}
+        </Text>
+        <Text>Dimension: {phoneDetails.dimension}</Text>
+        <Text>
+          {specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}
+        </Text>
+        <Text>OS: {phoneDetails.os}</Text>
+        <Text>Storage: {phoneDetails.storage}</Text>
+        <Text>
+          {specifications[10].title} : {specifications[10].specs[0].val[0]}
+        </Text>
+      </ScrollView>
     </SafeAreaView>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -84,8 +116,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     resizeMode: 'contain',
-    marginHorizontal: 5, 
+    marginHorizontal: 5,
     borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden'
   }
 })
