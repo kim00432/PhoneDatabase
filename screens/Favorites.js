@@ -5,7 +5,8 @@ import {
   View,
   Button,
   SafeAreaView,
-  FlatList
+  FlatList,
+  Pressable
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
@@ -64,9 +65,13 @@ export default function Favorites ({ navigation }) {
           }
           data={data}
           renderItem={favorite => (
-            <View>
-              <Text>{favorite.item.brand}</Text>
-            </View>
+            <Favorite
+              brand={favorite.item.brand}
+              phone_name={favorite.item.phone_name}
+              phoneURL={favorite.item.detail}
+              setPhoneURL={setPhoneURL}
+              navigation={navigation}
+            />
           )}
           keyExtractor={(item, index) => {
             return item + '-' + index
@@ -74,6 +79,23 @@ export default function Favorites ({ navigation }) {
         />
       )}
     </SafeAreaView>
+  )
+}
+
+function Favorite ({ brand, phone_name, phoneURL, setPhoneURL, navigation }) {
+  return (
+    <Pressable
+      onPress={ev => {
+        setPhoneURL(`${phoneURL}`)
+        console.log(phoneURL)
+        navigation.navigate('Details')
+      }}
+    >
+      <View>
+        <Text>{brand}</Text>
+        <Text>{phone_name}</Text>
+      </View>
+    </Pressable>
   )
 }
 
