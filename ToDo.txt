@@ -26,9 +26,9 @@ X StyleSheet
 
 # 4 Expo Components/APIs
 
-- AppLoading
-- Clipboard
-- Font
+X AppLoading
+X Clipboard
+X Font
 - ???
 
 # # ------------------------------------------ # #

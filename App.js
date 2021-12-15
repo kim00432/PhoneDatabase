@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { Pressable } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { useFonts } from 'expo-font'
+import * as Font from 'expo-font'
+import AppLoading from 'expo-app-loading'
 
 import Sidebar from './customDrawer'
 import HomeScreen from './screens/HomeScreen'
@@ -13,18 +14,23 @@ import Favorites from './screens/Favorites'
 
 import { PhonesProvider } from './context/PhonesContext'
 
-//root navigator - Drawer Navigator
-export default function App () {
-  const [loaded] = useFonts({
+const getFonts = () => 
+  Font.loadAsync({
     'Regular': require('./assets/fonts/Nunito-Regular.ttf'),
   })
+
+//root navigator - Drawer Navigator
+export default function App () {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   
-  if (!loaded) {
-    return null;
-  } else {return (
+  if (fontsLoaded) {
+    return  (
     <PhonesProvider>
       <AppContainer />
-    </PhonesProvider>
+    </PhonesProvider> )
+  } else { 
+    return (
+    <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)}  onError={console.warn}/>
   )}
 }
 
