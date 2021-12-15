@@ -41,7 +41,7 @@ function PhonesProvider (props) {
       setFavoritesList(updatedFavorites)
       console.log(`Updated favoritesList, now pushing to storage.`)
     } else {
-      setFavoritesList(obj)
+      setFavoritesList(new Array(obj))
       console.log(
         `Created first item for favoritesList, now pushing to storage.`
       )

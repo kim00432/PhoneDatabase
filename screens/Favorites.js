@@ -39,7 +39,8 @@ export default function Favorites ({ navigation }) {
           title='save item'
           onPress={() => addToFavorites({ test: 'test' })}
         />
-        {data && console.log(data)}
+        <Button title='view items' onPress={() => console.log(data)} />
+        {data && console.log(`data: ${data}`)}
       </View>
     </SafeAreaView>
   )
