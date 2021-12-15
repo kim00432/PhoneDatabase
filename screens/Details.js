@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
+import * as Clipboard from 'expo-clipboard'
 
 export default function Details ({ navigation }) {
   const [
@@ -25,6 +26,10 @@ export default function Details ({ navigation }) {
   ] = usePhonesDetails()
 
   const [specifications, setSpecifications] = useState([])
+
+  const copyToClipboard = () => {
+    Clipboard.setString(phoneURL)
+  }
 
   console.log(`phone url: ${phoneURL}`)
 
@@ -61,46 +66,24 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[0]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[1]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[2]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[3]}` }}
-        />
-        <Text>
-          {phoneDetails.brand} {phoneDetails.phone_name}
-        </Text>
-        <Text>
-          {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
-        </Text>
-        <Text>
-          {specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}
-        </Text>
-        <Text>
-          {specifications[12].specs[0].key} :{' '}
-          {specifications[12].specs[0].val[0]}
-        </Text>
-        <Text>Dimension: {phoneDetails.dimension}</Text>
-        <Text>
-          {specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}
-        </Text>
-        <Text>OS: {phoneDetails.os}</Text>
-        <Text>Storage: {phoneDetails.storage}</Text>
-        <Text>
-          {specifications[10].title} : {specifications[10].specs[0].val[0]}
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+        <TouchableOpacity onPress={copyToClipboard}>
+          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>Copy URL</Text>
+        </TouchableOpacity>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[0]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[1]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[2]}`}}/>
+          <Image style={styles.image} source={{uri: `${phoneDetails.phone_images[3]}`}}/>
+          <Text>{phoneDetails.brand} {phoneDetails.phone_name}</Text>
+          <Text>{specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}</Text>
+          <Text>{specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}</Text>
+          <Text>{specifications[12].specs[0].key} : {specifications[12].specs[0].val[0]}</Text>
+          <Text>Dimension: {phoneDetails.dimension}</Text>
+          <Text>{specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}</Text>
+          <Text>OS: {phoneDetails.os}</Text>
+          <Text>Storage: {phoneDetails.storage}</Text>
+          <Text>{specifications[10].title} : {specifications[10].specs[0].val[0]}</Text>
+    </ScrollView>
+  </SafeAreaView>
   )
 }
 
