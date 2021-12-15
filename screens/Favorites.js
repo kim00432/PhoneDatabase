@@ -1,5 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  SafeAreaView,
+  FlatList
+} from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 import { useEffect, useState } from 'react/cjs/react.development'
@@ -33,11 +40,39 @@ export default function Favorites ({ navigation }) {
         <Text>Testing Storage:</Text>
         <Button
           title='save item'
-          onPress={() => addToFavorites({ test: 'test' })}
+          onPress={() =>
+            addToFavorites({
+              brand: 'apple',
+              phone_name: 'iphone 33',
+              detail:
+                'http://api-mobilespecs.azharimm.site/v2/apple_iphone_13_pro_max-11089'
+            })
+          }
         />
-        {/* <Button title='view items' onPress={() => console.log(data)} /> */}
-        {data && console.log(`data: ${data}`)}
       </View>
+      {data && (
+        <FlatList
+          ListHeaderComponent={
+            <View
+              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
+            ></View>
+          }
+          ListFooterComponent={
+            <View
+              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
+            ></View>
+          }
+          data={data}
+          renderItem={favorite => (
+            <View>
+              <Text>{favorite.item.brand}</Text>
+            </View>
+          )}
+          keyExtractor={(item, index) => {
+            return item + '-' + index
+          }}
+        />
+      )}
     </SafeAreaView>
   )
 }
