@@ -33,10 +33,19 @@ function PhonesProvider (props) {
   //add to favorites
   function addToFavorites (obj) {
     console.log(`received properties, creating item '${obj}'`)
-    let updatedFavorites = favoritesList.map(a => ({ ...a }))
-    updatedFavorites.push(obj)
-    console.log(`Updated favoritesList, now pushing to storage.`)
-    setFavoritesList(updatedFavorites)
+
+    if (favoritesList) {
+      let updatedFavorites = favoritesList.map(a => ({ ...a }))
+      updatedFavorites.push(obj)
+
+      setFavoritesList(updatedFavorites)
+      console.log(`Updated favoritesList, now pushing to storage.`)
+    } else {
+      setFavoritesList(obj)
+      console.log(
+        `Created first item for favoritesList, now pushing to storage.`
+      )
+    }
   }
 
   //delete from favorites
