@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   FlatList,
   ListViewBase,
-  TouchableOpacity
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
