@@ -19,12 +19,8 @@ export default function Favorites ({ navigation }) {
     deleteFromFavorites
   ] = usePhonesDetails()
 
-  const [data, setData] = useState()
-  useEffect(() => {
-    let fetchedData = getFavorites()
-    setData(fetchedData)
-    console.log('fetched data put into state')
-  }, [data])
+  let data = getFavorites()
+  useEffect(() => {}, [getFavorites])
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
@@ -39,7 +35,7 @@ export default function Favorites ({ navigation }) {
           title='save item'
           onPress={() => addToFavorites({ test: 'test' })}
         />
-        <Button title='view items' onPress={() => console.log(data)} />
+        {/* <Button title='view items' onPress={() => console.log(data)} /> */}
         {data && console.log(`data: ${data}`)}
       </View>
     </SafeAreaView>
