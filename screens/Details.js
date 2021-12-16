@@ -3,10 +3,12 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  View,
   Button,
   SafeAreaView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
@@ -56,8 +58,13 @@ export default function Details ({ navigation }) {
   }, [])
 
   if (specifications.length === 0) {
-    return <Text>No data here yet....</Text>
+    return (
+    <View style={[styles.activity_container, styles.activity_horizontal]}>
+      <ActivityIndicator size="large" />
+    </View>
+    )
   }
+
   // console.log(specifications)
 
   return (
@@ -142,5 +149,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 20,
     overflow: 'hidden'
+  },
+  activity_container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  activity_horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
   }
 })
