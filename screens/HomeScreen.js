@@ -10,7 +10,8 @@ import {
   Image,
   Alert,
   Keyboard,
-  FlatList
+  FlatList,
+  TouchableOpacity
 } from 'react-native'
 import { useState } from 'react'
 
@@ -110,14 +111,15 @@ export default function HomeScreen (props) {
                 }}
               />
             </View>
-            <Button
-              title='Search phones'
+            <TouchableOpacity
               onPress={() => {
                 searchPhones()
                 Keyboard.dismiss()
               }}
               style={styles.button}
-            />
+            >
+              <Text style={{ ...styles.buttonText }}>Search phones</Text>
+            </TouchableOpacity>
           </View>
         }
         //Search results section
@@ -137,9 +139,7 @@ export default function HomeScreen (props) {
         onRefresh={() => {
           searchPhones()
         }}
-        ListFooterComponent={
-          <View style={{ paddingVertical: 8, backgroundColor: 'grey' }}></View>
-        }
+        ListFooterComponent={<View style={{ paddingVertical: 8 }}></View>}
       />
     </SafeAreaView>
   )
@@ -188,6 +188,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000'
   },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFF'
+  },
   container: {
     display: 'flex',
     flex: 1,
@@ -221,12 +226,21 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 10,
     marginHorizontal: 17,
-    marginVertical: 34
+    marginTop: 34
   },
   input: {
     flex: 1
   },
-  button: { backgroundColor: '#007AFF' },
+  button: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#007AFF',
+    marginHorizontal: 17,
+    marginVertical: 34,
+    paddingVertical: 12,
+    borderRadius: 10
+  },
   image: {
     width: 80,
     height: 105,
