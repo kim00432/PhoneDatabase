@@ -13,7 +13,6 @@ import {
   FlatList
 } from 'react-native'
 import { useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
 
 import { usePhonesDetails } from '../context/PhonesContext'
 
@@ -29,14 +28,15 @@ export default function HomeScreen (props) {
     phoneDetails,
     setPhoneDetails
   ] = usePhonesDetails()
+
   //refreshing state
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  //Initial search to find phone model
+  //Search to find phone model
   function searchPhones () {
     setIsRefreshing(true)
-
     console.log(`Searched for:${phoneModel}`)
+
     let url = `http://api-mobilespecs.azharimm.site/v2/search?query=${phoneModel}`
     fetch(url)
       .then(resp => {
@@ -64,73 +64,60 @@ export default function HomeScreen (props) {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      {/* Landing screen (top half) */}
-      <View>
-        <StatusBar style='auto' />
-
-        <Text>Phone Database</Text>
-        <Text>
-          Search for any smartphone for its details and specifications
-        </Text>
-        <TextInput
-          onChangeText={setPhoneModel}
-          onSubmitEditing={() => {
-            searchPhones()
-            Keyboard.dismiss()
-          }}
-          placeholder={`Try, "iPhone 12"`}
-          placeholderTextColor='#616264'
-          clearButtonMode='while-editing'
-          returnKeyType='search'
-        />
-        <Button
-          title='Search phones'
-          onPress={() => {
-            searchPhones()
-            Keyboard.dismiss()
-          }}
-        />
-        {/* <Button
-          title='Go to details'
-          onPress={() => props.navigation.navigate('Details')}
-        /> */}
-      </View>
-
-      {/* Search results (bottom half) */}
-      <View style={styles.container}>
-        <FlatList
-          ListHeaderComponent={
-            <View
-              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
-            ></View>
-          }
-          ListFooterComponent={
-            <View
-              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
-            ></View>
-          }
-          data={phoneResults}
-          renderItem={phone => (
-            <Phone
-              device={phone}
-              setPhoneURL={setPhoneURL}
-              phoneURL={phoneURL}
-              navigation={props.navigation}
+      <FlatList
+        // Landing/title section
+        ListHeaderComponent={
+          <View>
+            <Text>Phone Database</Text>
+            <Text>
+              Search for any smartphone for its details and specifications
+            </Text>
+            <TextInput
+              onChangeText={setPhoneModel}
+              onSubmitEditing={() => {
+                searchPhones()
+                Keyboard.dismiss()
+              }}
+              placeholder={`Try, "iPhone 12"`}
+              placeholderTextColor='#616264'
+              clearButtonMode='while-editing'
+              returnKeyType='search'
             />
-          )}
-          keyExtractor={(item, index) => {
-            return item.phone_name + '-' + index
-          }}
-          refreshing={isRefreshing}
-          onRefresh={() => {
-            searchPhones()
-          }}
-        />
-      </View>
+            <Button
+              title='Search phones'
+              onPress={() => {
+                searchPhones()
+                Keyboard.dismiss()
+              }}
+            />
+          </View>
+        }
+        //Search results section
+        data={phoneResults}
+        renderItem={phone => (
+          <Phone
+            device={phone}
+            setPhoneURL={setPhoneURL}
+            phoneURL={phoneURL}
+            navigation={props.navigation}
+          />
+        )}
+        keyExtractor={(item, index) => {
+          return item.phone_name + '-' + index
+        }}
+        refreshing={isRefreshing}
+        onRefresh={() => {
+          searchPhones()
+        }}
+        ListFooterComponent={
+          <View style={{ paddingVertical: 8, backgroundColor: 'grey' }}></View>
+        }
+      />
     </SafeAreaView>
   )
 }
 
+//Phone component returned for each result that is returned from search
 function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
   return (
     <Pressable
