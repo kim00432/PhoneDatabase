@@ -16,6 +16,8 @@ import { useState } from 'react'
 
 import { usePhonesDetails } from '../context/PhonesContext'
 
+import { Ionicons } from '@expo/vector-icons'
+
 export default function HomeScreen (props) {
   //PhoneContext state data
   const [
@@ -68,27 +70,53 @@ export default function HomeScreen (props) {
         // Landing/title section
         ListHeaderComponent={
           <View>
-            <Text>Phone Database</Text>
-            <Text>
+            <Text
+              style={{
+                ...styles.header,
+                marginVertical: 17,
+                marginHorizontal: 17
+              }}
+            >
+              Phone Database
+            </Text>
+            <Text
+              style={{
+                ...styles.body,
+                marginHorizontal: 17
+              }}
+            >
               Search for any smartphone for its details and specifications
             </Text>
-            <TextInput
-              onChangeText={setPhoneModel}
-              onSubmitEditing={() => {
-                searchPhones()
-                Keyboard.dismiss()
-              }}
-              placeholder={`Try, "iPhone 12"`}
-              placeholderTextColor='#616264'
-              clearButtonMode='while-editing'
-              returnKeyType='search'
-            />
+            <View style={styles.searchBar}>
+              <Ionicons
+                name='md-search-outline'
+                size={17}
+                color='#616264'
+                style={{ marginHorizontal: 4 }}
+              />
+              <TextInput
+                onChangeText={setPhoneModel}
+                onSubmitEditing={() => {
+                  searchPhones()
+                  Keyboard.dismiss()
+                }}
+                placeholder={`Try, "iPhone 12"`}
+                placeholderTextColor='#616264'
+                clearButtonMode='while-editing'
+                returnKeyType='search'
+                style={{
+                  fontSize: 15,
+                  ...styles.input
+                }}
+              />
+            </View>
             <Button
               title='Search phones'
               onPress={() => {
                 searchPhones()
                 Keyboard.dismiss()
               }}
+              style={styles.button}
             />
           </View>
         }
@@ -121,36 +149,89 @@ export default function HomeScreen (props) {
 function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
   return (
     <Pressable
+      style={{ ...styles.searchResultsCard, marginHorizontal: 17 }}
       onPress={ev => {
         setPhoneURL(`${device.item.detail}`)
         // console.log(phoneURL)
         navigation.navigate('Details')
       }}
     >
-      <View>
-        <Image
-          style={{
-            width: 80,
-            height: 105,
-            margin: 8
-          }}
-          source={{ uri: `${device.item.image}` }}
-        />
+      <View
+        style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+      >
+        <Image style={styles.image} source={{ uri: `${device.item.image}` }} />
         <View>
-          <Text>{device.item.brand}</Text>
-          <Text>{device.item.phone_name}</Text>
+          <Text style={{ ...styles.body, paddingBottom: 4 }}>
+            {device.item.brand}
+          </Text>
+          <Text style={styles.title}>{device.item.phone_name}</Text>
         </View>
       </View>
+      <Ionicons name='chevron-forward' size={24} color='#007AFF' />
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 34,
+    fontWeight: '600',
+    color: '#000'
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#000'
+  },
+  body: {
+    fontSize: 17,
+    fontWeight: '400',
+    color: '#000'
+  },
   container: {
     display: 'flex',
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  searchResultsCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    paddingVertical: 17,
+    paddingHorizontal: 17,
+    marginVertical: 8,
+    borderRadius: 17,
+
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 9 },
+    shadowOpacity: 0.14,
+    shadowRadius: 9,
+    elevation: 9
+  },
+  searchBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EBEAED',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderRadius: 10,
+    marginHorizontal: 17,
+    marginVertical: 34
+  },
+  input: {
+    flex: 1
+  },
+  button: { backgroundColor: '#007AFF' },
+  image: {
+    width: 80,
+    height: 105,
+    marginVertical: 8,
+    marginLeft: 8,
+    marginRight: 17
   }
 })
