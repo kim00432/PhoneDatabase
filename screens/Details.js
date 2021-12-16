@@ -6,12 +6,8 @@ import {
   Button,
   SafeAreaView,
   Image,
-  View,
-  TouchableOpacity,
-  FlatList,
-  ListViewBase,
+  TouchableOpacity
 } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 
@@ -32,8 +28,9 @@ export default function Details ({ navigation }) {
 
   const [specifications, setSpecifications] = useState([])
 
-  const copyToClipboard = () => {
-    Clipboard.setString(phoneURL)
+  const copyToClipboard = (brand, phone_name) => {
+    let stringToCopy = `${brand} ${phone_name}`
+    Clipboard.setString(stringToCopy)
   }
 
   console.log(`phone url: ${phoneURL}`)
@@ -66,13 +63,16 @@ export default function Details ({ navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       <ScrollView>
-        <StatusBar style='auto' />
         <Button
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-        <TouchableOpacity onPress={copyToClipboard}>
-          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>Copy URL</Text>
+        <TouchableOpacity
+          onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
+        >
+          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>
+            Copy phone name
+          </Text>
         </TouchableOpacity>
         <Button
           title='Save Item'
