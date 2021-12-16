@@ -27,8 +27,10 @@ export default function Favorites ({ navigation }) {
     deleteFromFavorites
   ] = usePhonesDetails()
 
-  let data = getFavorites()
+  //load favorites on load
   useEffect(() => {}, [getFavorites])
+
+  let data = getFavorites()
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
