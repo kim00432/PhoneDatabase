@@ -6,6 +6,7 @@ import { Pressable } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as Font from 'expo-font'
 import AppLoading from 'expo-app-loading'
+import { StatusBar } from 'expo-status-bar'
 
 import Sidebar from './customDrawer'
 import HomeScreen from './screens/HomeScreen'
@@ -25,6 +26,7 @@ export default function App () {
   if (fontsLoaded) {
     return (
       <PhonesProvider>
+        <StatusBar style='auto' />
         <AppContainer />
       </PhonesProvider>
     )
@@ -47,7 +49,6 @@ export default function App () {
 //root navigator - Drawer Navigator
 function AppContainer () {
   const Drawer = createDrawerNavigator()
-  // const navigation = useNavigation()
   return (
     <NavigationContainer theme={DrawerTheme}>
       <Drawer.Navigator
