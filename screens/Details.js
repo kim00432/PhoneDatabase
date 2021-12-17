@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Dimensions,
   View,
   Button,
   SafeAreaView,
@@ -12,6 +13,10 @@ import {
 } from 'react-native'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
+import { SliderBox } from "react-native-image-slider-box"
+
+const {width} = Dimensions.get("window")
+const height = width * 0.7
 
 export default function Details ({ navigation }) {
   const [
@@ -28,6 +33,8 @@ export default function Details ({ navigation }) {
     deleteFromFavorites
   ] = usePhonesDetails()
 
+  const [images, setImages] = useState([])
+  const [active, setActive] = useState(0)
   const [specifications, setSpecifications] = useState([])
 
   const copyToClipboard = (brand, phone_name) => {
@@ -47,6 +54,8 @@ export default function Details ({ navigation }) {
         setPhoneDetails(data.data)
         console.log('Fetch details data')
         setSpecifications(data.data.specifications)
+        setImages([data.data.phone_images[0], data.data.phone_images[1], data.data.phone_images[2], data.data.phone_images[3]])
+
       })
       .catch(err => {
         console.error(err.message)
@@ -66,6 +75,14 @@ export default function Details ({ navigation }) {
   }
 
   // console.log(specifications)
+  console.log(images)
+
+  let change = ({nativeEvent}) => {
+    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
+    if(slide !== active) {
+      setActive(slide)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
@@ -74,22 +91,30 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[0]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[1]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[2]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[3]}` }}
-        />
+         <ScrollView 
+            pagingEnabled 
+            horizontal 
+            onScroll={change}
+            scrollEventThrottle={0}
+            showsHorizontalScrollIndicator={false}
+            style={{width, height}}>
+            {
+              images.map((image, index) => (
+                <Image
+                key={index}
+                style={styles.image}
+                source={{ uri: image }}
+                />
+              ))
+            }
+         </ScrollView>
+         <View style={{flexDirection: 'row', position: 'absolute', bottom: 250, alignSelf: 'center' }}>
+           {
+             images.map((i, k) => (
+              <Text key={k} style={k == active ? styles.pagingActiveText : styles.pagingText}>⬤</Text>
+             ))
+           }
+         </View>
         <TouchableOpacity
           onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
         >
@@ -145,11 +170,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   image: {
-    width: 100,
-    height: 150,
+    width: width, 
+    height: height, 
     resizeMode: 'contain',
-    marginHorizontal: 5,
-    borderRadius: 20,
     overflow: 'hidden'
   },
   activity_container: {
@@ -177,5 +200,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.14,
     shadowRadius: 9,
     elevation: 10
-  }
+  },
+  pagingText: {
+    margin: 3,
+    fontSize: 10,
+    color: 'lightgrey'
+  },
+  pagingActiveText: {
+    margin: 3, 
+    fontSize: 10,
+  },
 })
