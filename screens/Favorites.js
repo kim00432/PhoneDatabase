@@ -37,7 +37,6 @@ export default function Favorites ({ navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       {!data && <Text>You don't have favorites yet</Text>}
-      {data && console.log(data)}
       {data && (
         <FlatList
           //Title section
@@ -70,7 +69,7 @@ export default function Favorites ({ navigation }) {
             <Favorite
               brand={favorite.item.brand}
               phone_name={favorite.item.phone_name}
-              phoneURL={favorite.item.detail}
+              phoneLink={favorite.item.detail}
               setPhoneURL={setPhoneURL}
               navigation={navigation}
               favoritesList={favoritesList}
@@ -90,7 +89,7 @@ export default function Favorites ({ navigation }) {
 function Favorite ({
   brand,
   phone_name,
-  phoneURL,
+  phoneLink,
   setPhoneURL,
   navigation,
   favoritesList,
@@ -102,8 +101,8 @@ function Favorite ({
       onPress={ev => {
         // setPhoneURL(`${phoneURL}`)
         // console.log(`Navigate to ${phoneURL}`)
-        console.log(`phone url to load: ${phoneURL}`)
-        navigation.navigate('Details', { phoneLink: phoneURL })
+        console.log(`phone url to load: ${phoneLink}`)
+        navigation.navigate('Details', { phoneLink: phoneLink })
       }}
       onLongPress={() => {
         Alert.alert(
