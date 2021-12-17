@@ -203,12 +203,13 @@ export default function Details ({ navigation }) {
             </Text>
             <Text>&nbsp; {specifications[1].specs[1].val[0]}</Text>
           </Text>
-          <Text style={styles.fontStyle}>
-            <Text style={styles.category}>
-              {specifications[12].specs[0].key}
-            </Text>
-            <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
+        {specifications[12] && 
+        <Text style={styles.fontStyle}>
+          <Text style={styles.category}>
+            {specifications[12].specs[0].key}
           </Text>
+          <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
+        </Text>}
           <Text style={styles.fontStyle}>
             <Text style={styles.category}>Dimension</Text>
             <Text>&nbsp; {phoneDetails.dimension}</Text>
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    marginVertical: 5,
+    marginVertical: 20,
     marginHorizontal: 17,
     borderRadius: 17,
 
