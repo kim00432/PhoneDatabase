@@ -15,61 +15,30 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import { Ionicons } from '@expo/vector-icons'
 
 export default function Favorites ({ navigation }) {
-  const [
-    phoneModel,
-    setPhoneModel,
-    phoneResults,
-    setPhoneResults,
-    phoneDetails,
-    setPhoneDetails,
-    favoritesList,
-    addToFavorites,
-    deleteFromFavorites
-  ] = usePhonesDetails()
+  const [, , , , , , favoritesList, , deleteFromFavorites] = usePhonesDetails()
 
   //load favorites on load
   useEffect(() => {}, [favoritesList])
 
-  let data = favoritesList
-
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      {!data && <Text>You don't have favorites yet</Text>}
-      {data && (
+      {!favoritesList && (
+        <View style={{ display: 'flex', flex: 1 }}>
+          <Header />
+        </View>
+      )}
+      {favoritesList && (
         <FlatList
           //Title section
-          ListHeaderComponent={
-            <View>
-              <Text
-                style={{
-                  ...styles.header,
-                  marginVertical: 17,
-                  marginHorizontal: 17
-                }}
-              >
-                Favorites
-              </Text>
-              <Text
-                style={{
-                  ...styles.body,
-                  marginHorizontal: 17,
-                  marginBottom: 34
-                }}
-              >
-                You can add favorites by clicking on the heart shaped icon
-                inside the Details page. Long press to remove.
-              </Text>
-            </View>
-          }
+          ListHeaderComponent={<Header />}
           //Favorites list
-          data={data}
+          data={favoritesList}
           renderItem={favorite => (
             <Favorite
               brand={favorite.item.brand}
               phone_name={favorite.item.phone_name}
               phoneLink={favorite.item.detail}
               navigation={navigation}
-              favoritesList={favoritesList}
               deleteFromFavorites={deleteFromFavorites}
             />
           )}
@@ -83,12 +52,37 @@ export default function Favorites ({ navigation }) {
   )
 }
 
+function Header () {
+  return (
+    <View>
+      <Text
+        style={{
+          ...styles.header,
+          marginVertical: 17,
+          marginHorizontal: 17
+        }}
+      >
+        Favorites
+      </Text>
+      <Text
+        style={{
+          ...styles.body,
+          marginHorizontal: 17,
+          marginBottom: 34
+        }}
+      >
+        You can add favorites by clicking on the heart shaped icon inside the
+        Details page. Long press to remove.
+      </Text>
+    </View>
+  )
+}
+
 function Favorite ({
   brand,
   phone_name,
   phoneLink,
   navigation,
-  favoritesList,
   deleteFromFavorites
 }) {
   return (
