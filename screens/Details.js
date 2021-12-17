@@ -21,7 +21,6 @@ const height = width * 0.6
 
 export default function Details ({ navigation }) {
   const route = useRoute()
-  console.log(`Route params: ${route.params.phoneLink}`)
   const [
     phoneModel,
     setPhoneModel,
@@ -42,14 +41,11 @@ export default function Details ({ navigation }) {
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  const [phoneLink, setPhoneLink] = useState()
 
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
   }
-
-  // console.log(`phone url: ${phoneURL}`)
 
   function getDetails (url) {
     setLoading(true)
@@ -78,10 +74,8 @@ export default function Details ({ navigation }) {
   }
 
   useEffect(() => {
-    route.params.phoneLink && setPhoneLink(route.params.phoneLink)
     route.params.phoneLink && getDetails(route.params.phoneLink)
-  }, [])
-  useEffect(() => {}, [])
+  }, [route.params.phoneLink])
 
   useEffect(() => {
     setIsFavorited(verifyPhoneInFavorites(phoneDetails.phone_name))
@@ -118,34 +112,25 @@ export default function Details ({ navigation }) {
             style={{ marginLeft: 20, marginBottom: 10 }}
             onPress={() => navigation.navigate('HomeScreen')}
           />
-          {!isFavorited && (
-            <Ionicons
-              style={{ marginRight: 40, marginBottom: 10 }}
-              name='heart-outline'
-              size={30}
-              color='#007AFF'
-              onPress={() => {
+          <Ionicons
+            style={{ marginRight: 40, marginBottom: 10 }}
+            name={isFavorited ? 'heart-sharp' : 'heart-outline'}
+            size={30}
+            color='#007AFF'
+            onPress={() => {
+              if (isFavorited) {
+                deleteFromFavorites(phoneDetails.phone_name)
+                setIsFavorited(false)
+              } else {
                 addToFavorites({
                   brand: phoneDetails.brand,
                   phone_name: phoneDetails.phone_name,
                   detail: route.params.phoneLink
                 })
                 setIsFavorited(true)
-              }}
-            />
-          )}
-          {isFavorited && (
-            <Ionicons
-              style={{ marginRight: 40, marginBottom: 10 }}
-              name='heart-sharp'
-              size={30}
-              color='#007AFF'
-              onPress={() => {
-                deleteFromFavorites(phoneDetails.phone_name)
-                setIsFavorited(false)
-              }}
-            />
-          )}
+              }
+            }}
+          />
         </View>
         <ScrollView
           pagingEnabled
