@@ -117,10 +117,6 @@ function Favorite ({
             {
               text: 'Delete',
               onPress: () => {
-                let data = favoritesList()
-                data.forEach(item => {
-                  console.log(item)
-                })
                 deleteFromFavorites(phone_name)
               }
             }
