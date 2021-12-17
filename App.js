@@ -4,7 +4,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { Pressable } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import * as Font from 'expo-font'
 import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar'
 
@@ -15,15 +14,14 @@ import Favorites from './screens/Favorites'
 
 import { PhonesProvider } from './context/PhonesContext'
 
-const getFonts = () =>
-  Font.loadAsync({
-    Regular: require('./assets/fonts/Nunito-Regular.ttf')
-  })
+const getResources = () => {
+  Promise.resolve()
+}
 
 export default function App () {
-  const [fontsLoaded, setFontsLoaded] = useState(false)
+  const [resourcesLoaded, setResourcesLoaded] = useState(false)
 
-  if (fontsLoaded) {
+  if (resourcesLoaded) {
     return (
       <PhonesProvider>
         <StatusBar style='auto' />
@@ -33,11 +31,11 @@ export default function App () {
   } else {
     return (
       <AppLoading
-        startAsync={getFonts}
+        startAsync={getResources}
         onFinish={() =>
           // setting timeout for 2 seconds so that we can actually see the splashscreen
           setTimeout(() => {
-            setFontsLoaded(true)
+            setResourcesLoaded(true)
           }, 2000)
         }
         onError={console.warn}
