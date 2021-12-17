@@ -24,19 +24,20 @@ export default function Favorites ({ navigation }) {
     setPhoneURL,
     phoneDetails,
     setPhoneDetails,
-    getFavorites,
+    favoritesList,
     addToFavorites,
     deleteFromFavorites
   ] = usePhonesDetails()
 
   //load favorites on load
-  useEffect(() => {}, [getFavorites])
+  useEffect(() => {}, [favoritesList])
 
-  let data = getFavorites()
+  let data = favoritesList
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      {!data && (<Text>You don't have favorites yet</Text>)}
+      {!data && <Text>You don't have favorites yet</Text>}
+      {data && console.log(data)}
       {data && (
         <FlatList
           //Title section
@@ -72,7 +73,7 @@ export default function Favorites ({ navigation }) {
               phoneURL={favorite.item.detail}
               setPhoneURL={setPhoneURL}
               navigation={navigation}
-              getFavorites={getFavorites}
+              favoritesList={favoritesList}
               deleteFromFavorites={deleteFromFavorites}
             />
           )}
@@ -92,16 +93,17 @@ function Favorite ({
   phoneURL,
   setPhoneURL,
   navigation,
-  getFavorites,
+  favoritesList,
   deleteFromFavorites
 }) {
   return (
     <Pressable
       style={{ ...styles.favoritesCard, marginHorizontal: 17 }}
       onPress={ev => {
-        setPhoneURL(`${phoneURL}`)
-        console.log(`Navigate to ${phoneURL}`)
-        navigation.navigate('Details')
+        // setPhoneURL(`${phoneURL}`)
+        // console.log(`Navigate to ${phoneURL}`)
+        console.log(`phone url to load: ${phoneURL}`)
+        navigation.navigate('Details', { phoneLink: phoneURL })
       }}
       onLongPress={() => {
         Alert.alert(
@@ -116,7 +118,7 @@ function Favorite ({
             {
               text: 'Delete',
               onPress: () => {
-                let data = getFavorites()
+                let data = favoritesList()
                 data.forEach(item => {
                   console.log(item)
                 })
