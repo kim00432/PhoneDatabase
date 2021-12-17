@@ -3,14 +3,16 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   SafeAreaView,
   FlatList,
-  Pressable
+  Pressable,
+  Alert
 } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
+
 import { usePhonesDetails } from '../context/PhonesContext'
 import { useEffect, useState } from 'react/cjs/react.development'
+
+import { Ionicons } from '@expo/vector-icons'
 
 export default function Favorites ({ navigation }) {
   const [
@@ -34,37 +36,33 @@ export default function Favorites ({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <View>
-        <StatusBar style='auto' />
-        <Text>Favorites</Text>
-        <Button onPress={() => navigation.goBack()} title='Go back home' />
-      </View>
-      <View>
-        <Text>Testing Storage:</Text>
-        <Button
-          title='save item'
-          onPress={() =>
-            addToFavorites({
-              brand: 'apple',
-              phone_name: 'iphone 33',
-              detail:
-                'http://api-mobilespecs.azharimm.site/v2/apple_iphone_13_pro_max-11089'
-            })
-          }
-        />
-      </View>
       {data && (
         <FlatList
+          //Title section
           ListHeaderComponent={
-            <View
-              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
-            ></View>
+            <View>
+              <Text
+                style={{
+                  ...styles.header,
+                  marginVertical: 17,
+                  marginHorizontal: 17
+                }}
+              >
+                Favorites
+              </Text>
+              <Text
+                style={{
+                  ...styles.body,
+                  marginHorizontal: 17,
+                  marginBottom: 34
+                }}
+              >
+                You can add favorites by clicking on the heart shaped icon
+                inside the Details page. Long press to remove.
+              </Text>
+            </View>
           }
-          ListFooterComponent={
-            <View
-              style={{ paddingVertical: 8, backgroundColor: 'grey' }}
-            ></View>
-          }
+          //Favorites list
           data={data}
           renderItem={favorite => (
             <Favorite
@@ -73,40 +71,114 @@ export default function Favorites ({ navigation }) {
               phoneURL={favorite.item.detail}
               setPhoneURL={setPhoneURL}
               navigation={navigation}
+              getFavorites={getFavorites}
+              deleteFromFavorites={deleteFromFavorites}
             />
           )}
           keyExtractor={(item, index) => {
             return item + '-' + index
           }}
+          ListFooterComponent={<View style={{ paddingVertical: 8 }}></View>}
         />
       )}
     </SafeAreaView>
   )
 }
 
-function Favorite ({ brand, phone_name, phoneURL, setPhoneURL, navigation }) {
+function Favorite ({
+  brand,
+  phone_name,
+  phoneURL,
+  setPhoneURL,
+  navigation,
+  getFavorites,
+  deleteFromFavorites
+}) {
   return (
     <Pressable
+      style={{ ...styles.favoritesCard, marginHorizontal: 17 }}
       onPress={ev => {
         setPhoneURL(`${phoneURL}`)
-        console.log(phoneURL)
+        console.log(`Navigate to ${phoneURL}`)
         navigation.navigate('Details')
       }}
+      onLongPress={() => {
+        Alert.alert(
+          'Delete item',
+          `Are you sure you want to delete ${phone_name} from your favorites?`,
+          [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel delete of favorite.'),
+              style: 'cancel'
+            },
+            {
+              text: 'Delete',
+              onPress: () => {
+                let data = getFavorites()
+                data.forEach(item => {
+                  console.log(item)
+                })
+                deleteFromFavorites(phone_name)
+              }
+            }
+          ],
+          { cancelable: true }
+        )
+      }}
     >
-      <View>
-        <Text>{brand}</Text>
-        <Text>{phone_name}</Text>
+      <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <Text style={styles.body}>{brand}</Text>
+        <Text style={{ ...styles.title, paddingLeft: 4 }}>{phone_name}</Text>
       </View>
+      <Ionicons name='chevron-forward' size={24} color='#007AFF' />
     </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 34,
+    fontWeight: '600',
+    color: '#000'
+  },
+  title: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#000'
+  },
+  body: {
+    fontSize: 17,
+    fontWeight: '400',
+    color: '#000'
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFF'
+  },
   container: {
     display: 'flex',
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  favoritesCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 17,
+    marginVertical: 8,
+    borderRadius: 17,
+
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 9 },
+    shadowOpacity: 0.14,
+    shadowRadius: 9,
+    elevation: 9
   }
 })

@@ -20,7 +20,7 @@ function PhonesProvider (props) {
   // received data from fetch of specific phone's details
   const [phoneDetails, setPhoneDetails] = useState([])
 
-  // * * AsyncStorage * * //
+  // * * AsyncStorage custom hook * * //
 
   //useAsyncStorage custom hook functions
   const [favoritesList, setFavoritesList] = useAsyncStorage('yoona-jc')
@@ -32,24 +32,30 @@ function PhonesProvider (props) {
 
   //add to favorites
   function addToFavorites (obj) {
-    console.log(`received properties, creating item '${obj}'`)
+    console.log(`Received properties, creating item '${obj}'`)
 
     if (favoritesList) {
       let updatedFavorites = favoritesList.map(a => ({ ...a }))
       updatedFavorites.push(obj)
 
       setFavoritesList(updatedFavorites)
-      console.log(`Updated favoritesList, now pushing to storage.`)
+      console.log(`Added new item to favoritesList.`)
     } else {
       setFavoritesList(new Array(obj))
-      console.log(
-        `Created first item for favoritesList, now pushing to storage.`
-      )
+      console.log(`Created first item for favoritesList.`)
     }
   }
 
   //delete from favorites
-  function deleteFromFavorites () {}
+  function deleteFromFavorites (phoneToDelete) {
+    console.log(`deleting item ${phoneToDelete}`)
+    let newList = favoritesList.filter(
+      item => item.phone_name !== phoneToDelete
+    )
+
+    setFavoritesList(newList)
+    console.log(`Deleted ${phoneToDelete}`)
+  }
 
   return (
     <PhonesContext.Provider
