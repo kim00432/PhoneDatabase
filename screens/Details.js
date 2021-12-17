@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   StyleSheet,
   Text,
   ScrollView,
   Dimensions,
   View,
-  Button,
   SafeAreaView,
   Image,
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native'
 import { useRoute } from '@react-navigation/native'
-import { PhonesProvider, usePhonesDetails } from '../context/PhonesContext'
+import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 import { Ionicons } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
@@ -40,14 +39,17 @@ export default function Details ({ navigation }) {
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  // const [soundObj, setSoundObj] = useState(new Audio.Sound);
 
+  // Clipboard API
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
+    console.log(`Copy : ${brand} ${phone_name}`)
   }
 
+  // Sound API
   const [sound, setSound] = useState()
+
 
   async function playSound () {
     console.log('Loading Sound')
@@ -69,6 +71,18 @@ export default function Details ({ navigation }) {
       : undefined
   }, [sound])
 
+  // Image slide function
+  let change = ({ nativeEvent }) => {
+    const slide = Math.ceil(
+      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+    )
+    if (slide !== active) {
+      setActive(slide)
+    }
+  }
+
+
+  // Get Phone Details - fetch data
   function getDetails (url) {
     setLoading(true)
     fetch(url)
@@ -103,6 +117,7 @@ export default function Details ({ navigation }) {
     setIsFavorited(verifyPhoneInFavorites(phoneDetails.phone_name))
   }, [favoritesList])
 
+  
   if (specifications.length === 0 || isLoading) {
     return (
       <View style={[styles.activity_container, styles.activity_horizontal]}>
@@ -111,22 +126,12 @@ export default function Details ({ navigation }) {
     )
   }
 
-  // console.log(specifications)
-  // console.log(images)
-
-  let change = ({ nativeEvent }) => {
-    const slide = Math.ceil(
-      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
-    )
-    if (slide !== active) {
-      setActive(slide)
-    }
-  }
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       <ScrollView style={{ marginTop: 10 }}>
         <View style={styles.icons}>
+          {/* Back button */}
           <Ionicons
             name='md-chevron-back-outline'
             size={30}
@@ -134,6 +139,7 @@ export default function Details ({ navigation }) {
             style={{ marginLeft: 20, marginBottom: 10 }}
             onPress={() => navigation.navigate('HomeScreen')}
           />
+          {/* Heart icon */}
           <Ionicons
             style={{ marginRight: 40, marginBottom: 10 }}
             name={isFavorited ? 'heart-sharp' : 'heart-outline'}
@@ -156,6 +162,7 @@ export default function Details ({ navigation }) {
             }}
           />
         </View>
+        {/* image slide */}
         <ScrollView
           pagingEnabled
           horizontal
@@ -178,6 +185,7 @@ export default function Details ({ navigation }) {
             </Text>
           ))}
         </View>
+        {/* Phone Details */}
         <View style={styles.detailsContainer}>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.name}>
