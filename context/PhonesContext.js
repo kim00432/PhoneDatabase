@@ -14,9 +14,6 @@ function PhonesProvider (props) {
   // data/search results received from search query
   const [phoneResults, setPhoneResults] = useState([])
 
-  // selected phone from list of results -> url that fetches specific phone's details
-  const [phoneURL, setPhoneURL] = useState(null)
-
   // received data from fetch of specific phone's details
   const [phoneDetails, setPhoneDetails] = useState([])
 
@@ -74,8 +71,6 @@ function PhonesProvider (props) {
         setPhoneModel,
         phoneResults,
         setPhoneResults,
-        phoneURL,
-        setPhoneURL,
         phoneDetails,
         setPhoneDetails,
         favoritesList,

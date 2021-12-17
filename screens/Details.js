@@ -27,8 +27,6 @@ export default function Details ({ navigation }) {
     setPhoneModel,
     phoneResults,
     setPhoneResults,
-    phoneURL,
-    setPhoneURL,
     phoneDetails,
     setPhoneDetails,
     favoritesList,

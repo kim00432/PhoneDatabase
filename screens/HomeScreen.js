@@ -28,8 +28,6 @@ export default function HomeScreen (props) {
     setPhoneModel,
     phoneResults,
     setPhoneResults,
-    phoneURL,
-    setPhoneURL,
     phoneDetails,
     setPhoneDetails
   ] = usePhonesDetails()
@@ -131,12 +129,7 @@ export default function HomeScreen (props) {
         //Search results section
         data={phoneResults}
         renderItem={phone => (
-          <Phone
-            device={phone}
-            setPhoneURL={setPhoneURL}
-            phoneURL={phoneURL}
-            navigation={props.navigation}
-          />
+          <Phone device={phone} navigation={props.navigation} />
         )}
         keyExtractor={(item, index) => {
           return item.phone_name + '-' + index
@@ -152,7 +145,7 @@ export default function HomeScreen (props) {
 }
 
 //Phone component returned for each result that is returned from search
-function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
+function Phone ({ device, navigation }) {
   return (
     <Pressable
       style={{ ...styles.searchResultsCard, marginHorizontal: 17 }}

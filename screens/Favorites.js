@@ -20,8 +20,6 @@ export default function Favorites ({ navigation }) {
     setPhoneModel,
     phoneResults,
     setPhoneResults,
-    phoneURL,
-    setPhoneURL,
     phoneDetails,
     setPhoneDetails,
     favoritesList,
@@ -70,7 +68,6 @@ export default function Favorites ({ navigation }) {
               brand={favorite.item.brand}
               phone_name={favorite.item.phone_name}
               phoneLink={favorite.item.detail}
-              setPhoneURL={setPhoneURL}
               navigation={navigation}
               favoritesList={favoritesList}
               deleteFromFavorites={deleteFromFavorites}
@@ -90,7 +87,6 @@ function Favorite ({
   brand,
   phone_name,
   phoneLink,
-  setPhoneURL,
   navigation,
   favoritesList,
   deleteFromFavorites
@@ -99,8 +95,6 @@ function Favorite ({
     <Pressable
       style={{ ...styles.favoritesCard, marginHorizontal: 17 }}
       onPress={ev => {
-        // setPhoneURL(`${phoneURL}`)
-        // console.log(`Navigate to ${phoneURL}`)
         console.log(`phone url to load: ${phoneLink}`)
         navigation.navigate('Details', { phoneLink: phoneLink })
       }}
