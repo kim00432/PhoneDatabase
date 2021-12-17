@@ -42,25 +42,34 @@ export default function Details ({ navigation }) {
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  const [soundObj, setSoundObj] = useState(new Audio.Sound);
-    
+  // const [soundObj, setSoundObj] = useState(new Audio.Sound);
+
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
   }
 
-  const playSound = async () => {
-    console.log('click')
-    soundObj.playAsync()
+  const [sound, setSound] = useState()
+
+  async function playSound () {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync(
+      require('../assets/sound.mp3')
+    )
+    setSound(sound)
+
+    console.log('Playing Sound')
+    await sound.playAsync()
   }
 
   useEffect(() => {
-    async function loadSounds() {
-    await soundObj.loadAsync(require('../assets/sound.mp3'))
-    }
-    loadSounds()
-  }, [])
-
+    return sound
+      ? () => {
+          console.log('Unloading Sound')
+          sound.unloadAsync()
+        }
+      : undefined
+  }, [sound])
 
   function getDetails (url) {
     setLoading(true)
@@ -138,7 +147,7 @@ export default function Details ({ navigation }) {
                 deleteFromFavorites(phoneDetails.phone_name)
                 setIsFavorited(false)
               } else {
-               
+                playSound()
                 addToFavorites({
                   brand: phoneDetails.brand,
                   phone_name: phoneDetails.phone_name,
