@@ -88,7 +88,7 @@ export default function Details ({ navigation }) {
   if (specifications.length === 0 || isLoading) {
     return (
       <View style={[styles.activity_container, styles.activity_horizontal]}>
-        <ActivityIndicator size='large' />
+        <ActivityIndicator size='large' color="#7C7C7C"/>
       </View>
     )
   }
