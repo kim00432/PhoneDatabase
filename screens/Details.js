@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native'
-import { usePhonesDetails } from '../context/PhonesContext'
+import { useRoute } from '@react-navigation/native'
+import { PhonesProvider, usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -19,6 +20,7 @@ const { width } = Dimensions.get('window')
 const height = width * 0.6
 
 export default function Details ({ navigation }) {
+  const route = useRoute()
   const [
     phoneModel,
     setPhoneModel,
@@ -28,22 +30,22 @@ export default function Details ({ navigation }) {
     setPhoneURL,
     phoneDetails,
     setPhoneDetails,
-    getFavorites,
+    favoritesList,
     addToFavorites,
-    deleteFromFavorites
+    deleteFromFavorites,
+    verifyPhoneInFavorites
   ] = usePhonesDetails()
 
   const [images, setImages] = useState([])
   const [active, setActive] = useState(0)
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
 
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
   }
-
-  console.log(`phone url: ${phoneURL}`)
 
   function getDetails (url) {
     setLoading(true)
@@ -62,6 +64,7 @@ export default function Details ({ navigation }) {
           data.data.phone_images[2],
           data.data.phone_images[3]
         ])
+        setIsFavorited(verifyPhoneInFavorites(data.data.phone_name))
         setLoading(false)
       })
       .catch(err => {
@@ -71,19 +74,23 @@ export default function Details ({ navigation }) {
   }
 
   useEffect(() => {
-    getDetails(phoneURL)
-  }, [phoneURL])
+    route.params.phoneLink && getDetails(route.params.phoneLink)
+  }, [route.params.phoneLink])
+
+  useEffect(() => {
+    setIsFavorited(verifyPhoneInFavorites(phoneDetails.phone_name))
+  }, [favoritesList])
 
   if (specifications.length === 0 || isLoading) {
     return (
       <View style={[styles.activity_container, styles.activity_horizontal]}>
-        <ActivityIndicator size='large' />
+        <ActivityIndicator size='large' color='#7C7C7C' />
       </View>
     )
   }
 
   // console.log(specifications)
-  console.log(images)
+  // console.log(images)
 
   let change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -107,16 +114,22 @@ export default function Details ({ navigation }) {
           />
           <Ionicons
             style={{ marginRight: 40, marginBottom: 10 }}
-            name='heart-outline'
+            name={isFavorited ? 'heart-sharp' : 'heart-outline'}
             size={30}
             color='#007AFF'
-            onPress={() =>
-              addToFavorites({
-                brand: phoneDetails.brand,
-                phone_name: phoneDetails.phone_name,
-                detail: phoneURL
-              })
-            }
+            onPress={() => {
+              if (isFavorited) {
+                deleteFromFavorites(phoneDetails.phone_name)
+                setIsFavorited(false)
+              } else {
+                addToFavorites({
+                  brand: phoneDetails.brand,
+                  phone_name: phoneDetails.phone_name,
+                  detail: route.params.phoneLink
+                })
+                setIsFavorited(true)
+              }
+            }}
           />
         </View>
         <ScrollView
@@ -172,12 +185,14 @@ export default function Details ({ navigation }) {
             </Text>
             <Text>&nbsp; {specifications[1].specs[1].val[0]}</Text>
           </Text>
-          <Text style={styles.fontStyle}>
-            <Text style={styles.category}>
-              {specifications[12].specs[0].key}
+          {specifications[12] && (
+            <Text style={styles.fontStyle}>
+              <Text style={styles.category}>
+                {specifications[12].specs[0].key}
+              </Text>
+              <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
             </Text>
-            <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
-          </Text>
+          )}
           <Text style={styles.fontStyle}>
             <Text style={styles.category}>Dimension</Text>
             <Text>&nbsp; {phoneDetails.dimension}</Text>
@@ -257,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    marginVertical: 5,
+    marginVertical: 20,
     marginHorizontal: 17,
     borderRadius: 17,
 

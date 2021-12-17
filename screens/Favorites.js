@@ -24,18 +24,19 @@ export default function Favorites ({ navigation }) {
     setPhoneURL,
     phoneDetails,
     setPhoneDetails,
-    getFavorites,
+    favoritesList,
     addToFavorites,
     deleteFromFavorites
   ] = usePhonesDetails()
 
   //load favorites on load
-  useEffect(() => {}, [getFavorites])
+  useEffect(() => {}, [favoritesList])
 
-  let data = getFavorites()
+  let data = favoritesList
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+      {!data && <Text>You don't have favorites yet</Text>}
       {data && (
         <FlatList
           //Title section
@@ -68,10 +69,10 @@ export default function Favorites ({ navigation }) {
             <Favorite
               brand={favorite.item.brand}
               phone_name={favorite.item.phone_name}
-              phoneURL={favorite.item.detail}
+              phoneLink={favorite.item.detail}
               setPhoneURL={setPhoneURL}
               navigation={navigation}
-              getFavorites={getFavorites}
+              favoritesList={favoritesList}
               deleteFromFavorites={deleteFromFavorites}
             />
           )}
@@ -88,19 +89,20 @@ export default function Favorites ({ navigation }) {
 function Favorite ({
   brand,
   phone_name,
-  phoneURL,
+  phoneLink,
   setPhoneURL,
   navigation,
-  getFavorites,
+  favoritesList,
   deleteFromFavorites
 }) {
   return (
     <Pressable
       style={{ ...styles.favoritesCard, marginHorizontal: 17 }}
       onPress={ev => {
-        setPhoneURL(`${phoneURL}`)
-        console.log(`Navigate to ${phoneURL}`)
-        navigation.navigate('Details')
+        // setPhoneURL(`${phoneURL}`)
+        // console.log(`Navigate to ${phoneURL}`)
+        console.log(`phone url to load: ${phoneLink}`)
+        navigation.navigate('Details', { phoneLink: phoneLink })
       }}
       onLongPress={() => {
         Alert.alert(
@@ -115,10 +117,6 @@ function Favorite ({
             {
               text: 'Delete',
               onPress: () => {
-                let data = getFavorites()
-                data.forEach(item => {
-                  console.log(item)
-                })
                 deleteFromFavorites(phone_name)
               }
             }

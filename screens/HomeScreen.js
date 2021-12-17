@@ -151,9 +151,9 @@ function Phone ({ device, navigation, phoneURL, setPhoneURL }) {
     <Pressable
       style={{ ...styles.searchResultsCard, marginHorizontal: 17 }}
       onPress={ev => {
-        setPhoneURL(`${device.item.detail}`)
+        // setPhoneURL(`${device.item.detail}`)
         // console.log(phoneURL)
-        navigation.navigate('Details')
+        navigation.navigate('Details', { phoneLink: device.item.detail })
       }}
     >
       <View
