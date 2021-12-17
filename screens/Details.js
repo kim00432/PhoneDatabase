@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native'
+import { useRoute } from '@react-navigation/native'
 import { PhonesProvider, usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 import { Ionicons } from '@expo/vector-icons'
@@ -19,6 +20,8 @@ const { width } = Dimensions.get('window')
 const height = width * 0.6
 
 export default function Details ({ navigation }) {
+  const route = useRoute()
+  console.log(`Route params: ${route.params.phoneLink}`)
   const [
     phoneModel,
     setPhoneModel,
@@ -28,9 +31,10 @@ export default function Details ({ navigation }) {
     setPhoneURL,
     phoneDetails,
     setPhoneDetails,
-    getFavorites,
+    favoritesList,
     addToFavorites,
-    deleteFromFavorites
+    deleteFromFavorites,
+    verifyPhoneInFavorites
   ] = usePhonesDetails()
 
   const [images, setImages] = useState([])
@@ -38,6 +42,7 @@ export default function Details ({ navigation }) {
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
+  const [phoneLink, setPhoneLink] = useState()
 
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
@@ -71,24 +76,20 @@ export default function Details ({ navigation }) {
       })
   }
 
-  let favorites = getFavorites()
   useEffect(() => {
-    getDetails(phoneURL)
+    route.params.phoneLink && setPhoneLink(route.params.phoneLink)
+    phoneLink && getDetails(phoneLink)
+  }, [])
+  useEffect(() => {}, [])
 
-    console.log('start search')
-    favorites &&
-      favorites.forEach(item => {
-        console.log(item)
-        if (item.phone_name == phoneDetails.phone_name) {
-          setIsFavorited(true)
-        }
-      })
-  }, [phoneURL, favorites])
+  useEffect(() => {
+    setIsFavorited(verifyPhoneInFavorites(phoneDetails.phone_name))
+  }, [favoritesList])
 
   if (specifications.length === 0 || isLoading) {
     return (
       <View style={[styles.activity_container, styles.activity_horizontal]}>
-        <ActivityIndicator size='large' color="#7C7C7C"/>
+        <ActivityIndicator size='large' color='#7C7C7C' />
       </View>
     )
   }
@@ -139,11 +140,6 @@ export default function Details ({ navigation }) {
               size={30}
               color='#007AFF'
               onPress={() => {
-                addToFavorites({
-                  brand: phoneDetails.brand,
-                  phone_name: phoneDetails.phone_name,
-                  detail: phoneURL
-                })
                 deleteFromFavorites(phoneDetails.phone_name)
                 setIsFavorited(false)
               }}
@@ -203,13 +199,14 @@ export default function Details ({ navigation }) {
             </Text>
             <Text>&nbsp; {specifications[1].specs[1].val[0]}</Text>
           </Text>
-        {specifications[12] && 
-        <Text style={styles.fontStyle}>
-          <Text style={styles.category}>
-            {specifications[12].specs[0].key}
-          </Text>
-          <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
-        </Text>}
+          {specifications[12] && (
+            <Text style={styles.fontStyle}>
+              <Text style={styles.category}>
+                {specifications[12].specs[0].key}
+              </Text>
+              <Text>&nbsp; {specifications[12].specs[0].val[0]}</Text>
+            </Text>
+          )}
           <Text style={styles.fontStyle}>
             <Text style={styles.category}>Dimension</Text>
             <Text>&nbsp; {phoneDetails.dimension}</Text>
