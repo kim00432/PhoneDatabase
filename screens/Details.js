@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
-import { SliderBox } from "react-native-image-slider-box"
+import { Ionicons } from '@expo/vector-icons'
 
 const {width} = Dimensions.get("window")
 const height = width * 0.7
@@ -91,6 +91,18 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
+          <Ionicons
+            style={{textAlign: 'right', marginRight: 40, marginBottom: 10}}
+            name='heart-outline'
+            size={30}
+            onPress={() =>
+              addToFavorites({
+                brand: phoneDetails.brand,
+                phone_name: phoneDetails.phone_name,
+                detail: phoneURL
+              })
+            }
+          />
          <ScrollView 
             pagingEnabled 
             horizontal 
@@ -108,34 +120,28 @@ export default function Details ({ navigation }) {
               ))
             }
          </ScrollView>
-         <View style={{flexDirection: 'row', position: 'absolute', bottom: 250, alignSelf: 'center' }}>
+         <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 10 }}>
            {
              images.map((i, k) => (
               <Text key={k} style={k == active ? styles.pagingActiveText : styles.pagingText}>⬤</Text>
              ))
            }
-         </View>
-        <TouchableOpacity
-          onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
-        >
-          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>
-            Copy phone name
-          </Text>
-        </TouchableOpacity>
-        <Button
-          title='Save Item'
-          onPress={() =>
-            addToFavorites({
-              brand: phoneDetails.brand,
-              phone_name: phoneDetails.phone_name,
-              detail: phoneURL
-            })
-          }
-        />
+        </View>
         <View style={styles.detailsContainer}>
-          <Text>
-            {phoneDetails.brand} {phoneDetails.phone_name}
-          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text>
+              {phoneDetails.brand} {phoneDetails.phone_name}
+            </Text>
+            <TouchableOpacity
+              onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
+            >
+              <Ionicons
+                    name='md-copy-outline'
+                    size={25}
+                    color='#000'
+                  />
+            </TouchableOpacity>
+          </View>
           <Text>
             {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
           </Text>
