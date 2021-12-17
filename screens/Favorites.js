@@ -5,7 +5,8 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Pressable
+  Pressable,
+  Alert
 } from 'react-native'
 
 import { usePhonesDetails } from '../context/PhonesContext'
@@ -70,6 +71,8 @@ export default function Favorites ({ navigation }) {
               phoneURL={favorite.item.detail}
               setPhoneURL={setPhoneURL}
               navigation={navigation}
+              getFavorites={getFavorites}
+              deleteFromFavorites={deleteFromFavorites}
             />
           )}
           keyExtractor={(item, index) => {
@@ -82,14 +85,46 @@ export default function Favorites ({ navigation }) {
   )
 }
 
-function Favorite ({ brand, phone_name, phoneURL, setPhoneURL, navigation }) {
+function Favorite ({
+  brand,
+  phone_name,
+  phoneURL,
+  setPhoneURL,
+  navigation,
+  getFavorites,
+  deleteFromFavorites
+}) {
   return (
     <Pressable
       style={{ ...styles.favoritesCard, marginHorizontal: 17 }}
       onPress={ev => {
         setPhoneURL(`${phoneURL}`)
-        console.log(phoneURL)
+        console.log(`Navigate to ${phoneURL}`)
         navigation.navigate('Details')
+      }}
+      onLongPress={() => {
+        Alert.alert(
+          'Delete item',
+          `Are you sure you want to delete ${phone_name} from your favorites?`,
+          [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel delete of favorite.'),
+              style: 'cancel'
+            },
+            {
+              text: 'Delete',
+              onPress: () => {
+                let data = getFavorites()
+                data.forEach(item => {
+                  console.log(item)
+                })
+                deleteFromFavorites(phone_name)
+              }
+            }
+          ],
+          { cancelable: true }
+        )
       }}
     >
       <View style={{ display: 'flex', flexDirection: 'row' }}>
