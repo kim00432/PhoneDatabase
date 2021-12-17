@@ -68,6 +68,7 @@ export default function Details ({ navigation }) {
           data.data.phone_images[2],
           data.data.phone_images[3]
         ])
+        setIsFavorited(verifyPhoneInFavorites(data.data.phone_name))
         setLoading(false)
       })
       .catch(err => {
@@ -78,7 +79,7 @@ export default function Details ({ navigation }) {
 
   useEffect(() => {
     route.params.phoneLink && setPhoneLink(route.params.phoneLink)
-    phoneLink && getDetails(phoneLink)
+    route.params.phoneLink && getDetails(route.params.phoneLink)
   }, [])
   useEffect(() => {}, [])
 
@@ -127,7 +128,7 @@ export default function Details ({ navigation }) {
                 addToFavorites({
                   brand: phoneDetails.brand,
                   phone_name: phoneDetails.phone_name,
-                  detail: phoneURL
+                  detail: route.params.phoneLink
                 })
                 setIsFavorited(true)
               }}
