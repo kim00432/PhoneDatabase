@@ -3,13 +3,20 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Dimensions,
+  View,
   Button,
   SafeAreaView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native'
 import { usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
+import { Ionicons } from '@expo/vector-icons'
+
+const {width} = Dimensions.get("window")
+const height = width * 0.6
 
 export default function Details ({ navigation }) {
   const [
@@ -26,6 +33,8 @@ export default function Details ({ navigation }) {
     deleteFromFavorites
   ] = usePhonesDetails()
 
+  const [images, setImages] = useState([])
+  const [active, setActive] = useState(0)
   const [specifications, setSpecifications] = useState([])
 
   const copyToClipboard = (brand, phone_name) => {
@@ -45,6 +54,8 @@ export default function Details ({ navigation }) {
         setPhoneDetails(data.data)
         console.log('Fetch details data')
         setSpecifications(data.data.specifications)
+        setImages([data.data.phone_images[0], data.data.phone_images[1], data.data.phone_images[2], data.data.phone_images[3]])
+
       })
       .catch(err => {
         console.error(err.message)
@@ -56,72 +67,151 @@ export default function Details ({ navigation }) {
   }, [])
 
   if (specifications.length === 0) {
-    return <Text>No data here yet....</Text>
+    return (
+    <View style={[styles.activity_container, styles.activity_horizontal]}>
+      <ActivityIndicator size="large" />
+    </View>
+    )
   }
+
   // console.log(specifications)
+  console.log(images)
+
+  let change = ({nativeEvent}) => {
+    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
+    if(slide !== active) {
+      setActive(slide)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <ScrollView>
-        <Button
-          title='Go back'
-          onPress={() => navigation.navigate('HomeScreen')}
-        />
-        <TouchableOpacity
-          onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
-        >
-          <Text style={{ fontFamily: 'Regular', fontSize: 15 }}>
-            Copy phone name
+      <ScrollView style={{marginTop: 10}}>
+         <View style={styles.icons}>
+          <Ionicons
+            name='md-chevron-back-outline' size={30} color='#007AFF' 
+            style={{marginLeft: 20, marginBottom: 10}}
+            onPress={() => navigation.navigate('HomeScreen')}
+          />
+          <Ionicons
+            style={{marginRight: 40, marginBottom: 10}}
+            name='heart-outline'
+            size={30}
+            color='#007AFF' 
+            onPress={() =>
+              addToFavorites({
+                brand: phoneDetails.brand,
+                phone_name: phoneDetails.phone_name,
+                detail: phoneURL
+              })
+            }
+          />
+         </View>
+         <ScrollView 
+            pagingEnabled 
+            horizontal 
+            onScroll={change}
+            scrollEventThrottle={0}
+            showsHorizontalScrollIndicator={false}
+            style={{width, height}}>
+            {
+              images.map((image, index) => (
+                <Image
+                key={index}
+                style={styles.image}
+                source={{ uri: image }}
+                />
+              ))
+            }
+         </ScrollView>
+         <View style={styles.imageSlide}>
+           {
+             images.map((i, k) => (
+              <Text key={k} style={k == active ? styles.pagingActiveText : styles.pagingText}>⬤</Text>
+             ))
+           }
+        </View>
+        <View style={styles.detailsContainer}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.name}>
+              {phoneDetails.brand} {phoneDetails.phone_name}
+            </Text>
+            <TouchableOpacity
+              onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
+            >
+              <Ionicons
+                    style={{marginLeft: 10}}
+                    name='md-copy-outline'
+                    size={25}
+                    color='#007AFF' 
+                  />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            {specifications[1].specs[0].key}
+            </Text>
+            <Text>
+            &nbsp; {specifications[1].specs[0].val[0]}
+            </Text>
           </Text>
-        </TouchableOpacity>
-        <Button
-          title='Save Item'
-          onPress={() =>
-            addToFavorites({
-              brand: phoneDetails.brand,
-              phone_name: phoneDetails.phone_name,
-              detail: phoneURL
-            })
-          }
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[0]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[1]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[2]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[3]}` }}
-        />
-        <Text>
-          {phoneDetails.brand} {phoneDetails.phone_name}
-        </Text>
-        <Text>
-          {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
-        </Text>
-        <Text>
-          {specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}
-        </Text>
-        <Text>
-          {specifications[12].specs[0].key} :{' '}
-          {specifications[12].specs[0].val[0]}
-        </Text>
-        <Text>Dimension: {phoneDetails.dimension}</Text>
-        <Text>
-          {specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}
-        </Text>
-        <Text>OS: {phoneDetails.os}</Text>
-        <Text>Storage: {phoneDetails.storage}</Text>
-        <Text>
-          {specifications[10].title} : {specifications[10].specs[0].val[0]}
-        </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            {specifications[1].specs[1].key} 
+            </Text>
+            <Text>
+            &nbsp; {specifications[1].specs[1].val[0]}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            {specifications[12].specs[0].key}
+            </Text>
+            <Text>
+            &nbsp; {specifications[12].specs[0].val[0]}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            Dimension
+            </Text>
+            <Text>
+              &nbsp; {phoneDetails.dimension}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            {specifications[3].specs[1].key}
+            </Text>
+            <Text>
+              &nbsp; {specifications[3].specs[1].val[0]}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+              OS
+            </Text>
+            <Text>
+              &nbsp; {phoneDetails.os}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            Storage
+            </Text>
+            <Text>
+              &nbsp; {phoneDetails.storage}
+            </Text>
+          </Text>
+          <Text style={styles.fontStyle}>
+            <Text style={styles.category}>
+            {specifications[10].title}
+            </Text>
+            <Text>
+              &nbsp; {specifications[10].specs[0].val[0]}
+            </Text>
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
@@ -135,12 +225,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  fontStyle: {
+    fontSize: 15,
+    lineHeight: 25
+  }, 
+  category: {
+    fontWeight: '600',
+  },
+  name: {
+    fontSize: 20,
+    color: '#007AFF' 
+  },
   image: {
-    width: 100,
-    height: 150,
+    width: width, 
+    height: height, 
     resizeMode: 'contain',
-    marginHorizontal: 5,
-    borderRadius: 20,
     overflow: 'hidden'
-  }
+  },
+  imageSlide: {
+    flexDirection: 'row', 
+    alignSelf: 'center', 
+    marginTop: 10 
+  },
+  icons: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+  activity_container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  activity_horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+  },
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    marginVertical: 5,
+    marginHorizontal: 17,
+    borderRadius: 17,
+
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.14,
+    shadowRadius: 9,
+    elevation: 10
+  },
+  pagingText: {
+    margin: 5,
+    fontSize: 8,
+    color: 'lightgrey'
+  },
+  pagingActiveText: {
+    margin: 5, 
+    fontSize: 8,
+  },
 })

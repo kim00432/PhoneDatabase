@@ -123,7 +123,7 @@ function HomeStackNav () {
       <Stack.Screen
         name='Details'
         component={Details}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: 'Details' }}
       />
     </Stack.Navigator>
   )
