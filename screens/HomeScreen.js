@@ -27,9 +27,7 @@ export default function HomeScreen (props) {
     phoneModel,
     setPhoneModel,
     phoneResults,
-    setPhoneResults,
-    phoneDetails,
-    setPhoneDetails
+    setPhoneResults
   ] = usePhonesDetails()
 
   //refreshing state
@@ -150,8 +148,6 @@ function Phone ({ device, navigation }) {
     <Pressable
       style={{ ...styles.searchResultsCard, marginHorizontal: 17 }}
       onPress={ev => {
-        // setPhoneURL(`${device.item.detail}`)
-        // console.log(phoneURL)
         navigation.navigate('Details', { phoneLink: device.item.detail })
       }}
     >
