@@ -11,7 +11,9 @@ import {
   Alert,
   Keyboard,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native'
 import { useState } from 'react'
 
@@ -70,57 +72,61 @@ export default function HomeScreen (props) {
       <FlatList
         // Landing/title section
         ListHeaderComponent={
-          <View>
-            <Text
-              style={{
-                ...styles.header,
-                marginVertical: 17,
-                marginHorizontal: 17
-              }}
-            >
-              Phone Database
-            </Text>
-            <Text
-              style={{
-                ...styles.body,
-                marginHorizontal: 17
-              }}
-            >
-              Search for any smartphone for its details and specifications
-            </Text>
-            <View style={styles.searchBar}>
-              <Ionicons
-                name='md-search-outline'
-                size={17}
-                color='#616264'
-                style={{ marginHorizontal: 4 }}
-              />
-              <TextInput
-                onChangeText={setPhoneModel}
-                onSubmitEditing={() => {
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          >
+            <View>
+              <Text
+                style={{
+                  ...styles.header,
+                  marginVertical: 17,
+                  marginHorizontal: 17
+                }}
+              >
+                Phone Database
+              </Text>
+              <Text
+                style={{
+                  ...styles.body,
+                  marginHorizontal: 17
+                }}
+              >
+                Search for any smartphone for its details and specifications
+              </Text>
+              <View style={styles.searchBar}>
+                <Ionicons
+                  name='md-search-outline'
+                  size={17}
+                  color='#616264'
+                  style={{ marginHorizontal: 4 }}
+                />
+                <TextInput
+                  onChangeText={setPhoneModel}
+                  onSubmitEditing={() => {
+                    searchPhones()
+                    Keyboard.dismiss()
+                  }}
+                  placeholder={`Try, "iPhone 12"`}
+                  placeholderTextColor='#616264'
+                  clearButtonMode='while-editing'
+                  returnKeyType='search'
+                  style={{
+                    fontSize: 15,
+                    ...styles.input
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
                   searchPhones()
                   Keyboard.dismiss()
                 }}
-                placeholder={`Try, "iPhone 12"`}
-                placeholderTextColor='#616264'
-                clearButtonMode='while-editing'
-                returnKeyType='search'
-                style={{
-                  fontSize: 15,
-                  ...styles.input
-                }}
-              />
+                style={styles.button}
+              >
+                <Text style={{ ...styles.buttonText }}>Search phones</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                searchPhones()
-                Keyboard.dismiss()
-              }}
-              style={styles.button}
-            >
-              <Text style={{ ...styles.buttonText }}>Search phones</Text>
-            </TouchableOpacity>
-          </View>
+          </KeyboardAvoidingView>
         }
         //Search results section
         data={phoneResults}
