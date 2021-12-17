@@ -11,10 +11,10 @@ X FlatList or ScrollView
 X Button
 X Pressable
 X SafeAreaView
-- KeyboardAvoidingView
+X KeyboardAvoidingView
 X StatusBar
 X TextInput
-- ActivityIndicator
+X ActivityIndicator
 
 
 # 3 React Native APIs
@@ -29,6 +29,6 @@ X Keyboard or Platform
 X AppLoading
 X Clipboard
 X Font
-- ???
+X AsyncStorage
 
 # # ------------------------------------------ # #

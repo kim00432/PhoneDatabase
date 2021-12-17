@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import { useRoute } from '@react-navigation/native'
 import { PhonesProvider, usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 import { Ionicons } from '@expo/vector-icons'
+import { Audio } from 'expo-av'
 
 const { width } = Dimensions.get('window')
 const height = width * 0.6
@@ -41,11 +42,34 @@ export default function Details ({ navigation }) {
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
+  // const [soundObj, setSoundObj] = useState(new Audio.Sound);
 
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
   }
+
+  const [sound, setSound] = useState()
+
+  async function playSound () {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync(
+      require('../assets/sound.mp3')
+    )
+    setSound(sound)
+
+    console.log('Playing Sound')
+    await sound.playAsync()
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound')
+          sound.unloadAsync()
+        }
+      : undefined
+  }, [sound])
 
   function getDetails (url) {
     setLoading(true)
@@ -118,10 +142,12 @@ export default function Details ({ navigation }) {
             size={30}
             color='#007AFF'
             onPress={() => {
+              playSound()
               if (isFavorited) {
                 deleteFromFavorites(phoneDetails.phone_name)
                 setIsFavorited(false)
               } else {
+                playSound()
                 addToFavorites({
                   brand: phoneDetails.brand,
                   phone_name: phoneDetails.phone_name,
