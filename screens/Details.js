@@ -74,6 +74,22 @@ export default function Details ({ navigation }) {
           title='Go back'
           onPress={() => navigation.navigate('HomeScreen')}
         />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[0]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[1]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[2]}` }}
+        />
+        <Image
+          style={styles.image}
+          source={{ uri: `${phoneDetails.phone_images[3]}` }}
+        />
         <TouchableOpacity
           onPress={copyToClipboard(phoneDetails.brand, phoneDetails.phone_name)}
         >
@@ -91,44 +107,30 @@ export default function Details ({ navigation }) {
             })
           }
         />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[0]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[1]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[2]}` }}
-        />
-        <Image
-          style={styles.image}
-          source={{ uri: `${phoneDetails.phone_images[3]}` }}
-        />
-        <Text>
-          {phoneDetails.brand} {phoneDetails.phone_name}
-        </Text>
-        <Text>
-          {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
-        </Text>
-        <Text>
-          {specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}
-        </Text>
-        <Text>
-          {specifications[12].specs[0].key} :{' '}
-          {specifications[12].specs[0].val[0]}
-        </Text>
-        <Text>Dimension: {phoneDetails.dimension}</Text>
-        <Text>
-          {specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}
-        </Text>
-        <Text>OS: {phoneDetails.os}</Text>
-        <Text>Storage: {phoneDetails.storage}</Text>
-        <Text>
-          {specifications[10].title} : {specifications[10].specs[0].val[0]}
-        </Text>
+        <View style={styles.detailsContainer}>
+          <Text>
+            {phoneDetails.brand} {phoneDetails.phone_name}
+          </Text>
+          <Text>
+            {specifications[1].specs[0].key} : {specifications[1].specs[0].val[0]}
+          </Text>
+          <Text>
+            {specifications[1].specs[1].key} : {specifications[1].specs[1].val[0]}
+          </Text>
+          <Text>
+            {specifications[12].specs[0].key} :{' '}
+            {specifications[12].specs[0].val[0]}
+          </Text>
+          <Text>Dimension: {phoneDetails.dimension}</Text>
+          <Text>
+            {specifications[3].specs[1].key} : {specifications[3].specs[1].val[0]}
+          </Text>
+          <Text>OS: {phoneDetails.os}</Text>
+          <Text>Storage: {phoneDetails.storage}</Text>
+          <Text>
+            {specifications[10].title} : {specifications[10].specs[0].val[0]}
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
@@ -158,5 +160,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     padding: 10
+  },
+  detailsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 5,
+    borderRadius: 17,
+
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 9 },
+    shadowOpacity: 0.14,
+    shadowRadius: 9,
+    elevation: 10
   }
 })
