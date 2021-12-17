@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native'
-import { usePhonesDetails } from '../context/PhonesContext'
+import { PhonesProvider, usePhonesDetails } from '../context/PhonesContext'
 import * as Clipboard from 'expo-clipboard'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -37,13 +37,14 @@ export default function Details ({ navigation }) {
   const [active, setActive] = useState(0)
   const [specifications, setSpecifications] = useState([])
   const [isLoading, setLoading] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(false)
 
   const copyToClipboard = (brand, phone_name) => {
     let stringToCopy = `${brand} ${phone_name}`
     Clipboard.setString(stringToCopy)
   }
 
-  console.log(`phone url: ${phoneURL}`)
+  // console.log(`phone url: ${phoneURL}`)
 
   function getDetails (url) {
     setLoading(true)
@@ -70,9 +71,19 @@ export default function Details ({ navigation }) {
       })
   }
 
+  let favorites = getFavorites()
   useEffect(() => {
     getDetails(phoneURL)
-  }, [phoneURL])
+
+    console.log('start search')
+    favorites &&
+      favorites.forEach(item => {
+        console.log(item)
+        if (item.phone_name == phoneDetails.phone_name) {
+          setIsFavorited(true)
+        }
+      })
+  }, [phoneURL, favorites])
 
   if (specifications.length === 0 || isLoading) {
     return (
@@ -83,7 +94,7 @@ export default function Details ({ navigation }) {
   }
 
   // console.log(specifications)
-  console.log(images)
+  // console.log(images)
 
   let change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -105,19 +116,39 @@ export default function Details ({ navigation }) {
             style={{ marginLeft: 20, marginBottom: 10 }}
             onPress={() => navigation.navigate('HomeScreen')}
           />
-          <Ionicons
-            style={{ marginRight: 40, marginBottom: 10 }}
-            name='heart-outline'
-            size={30}
-            color='#007AFF'
-            onPress={() =>
-              addToFavorites({
-                brand: phoneDetails.brand,
-                phone_name: phoneDetails.phone_name,
-                detail: phoneURL
-              })
-            }
-          />
+          {!isFavorited && (
+            <Ionicons
+              style={{ marginRight: 40, marginBottom: 10 }}
+              name='heart-outline'
+              size={30}
+              color='#007AFF'
+              onPress={() => {
+                addToFavorites({
+                  brand: phoneDetails.brand,
+                  phone_name: phoneDetails.phone_name,
+                  detail: phoneURL
+                })
+                setIsFavorited(true)
+              }}
+            />
+          )}
+          {isFavorited && (
+            <Ionicons
+              style={{ marginRight: 40, marginBottom: 10 }}
+              name='heart-sharp'
+              size={30}
+              color='#007AFF'
+              onPress={() => {
+                addToFavorites({
+                  brand: phoneDetails.brand,
+                  phone_name: phoneDetails.phone_name,
+                  detail: phoneURL
+                })
+                deleteFromFavorites(phoneDetails.phone_name)
+                setIsFavorited(false)
+              }}
+            />
+          )}
         </View>
         <ScrollView
           pagingEnabled

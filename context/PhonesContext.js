@@ -9,7 +9,7 @@ function PhonesProvider (props) {
   // * * state data * * //
 
   // search query
-  const [phoneModel, setPhoneModel] = useState('iPhone 12')
+  const [phoneModel, setPhoneModel] = useState('Huawei')
 
   // data/search results received from search query
   const [phoneResults, setPhoneResults] = useState([])
