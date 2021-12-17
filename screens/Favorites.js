@@ -36,6 +36,7 @@ export default function Favorites ({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+      {!data && (<Text>You don't have favorites yet</Text>)}
       {data && (
         <FlatList
           //Title section
