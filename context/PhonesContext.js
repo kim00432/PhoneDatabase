@@ -25,11 +25,6 @@ function PhonesProvider (props) {
   //useAsyncStorage custom hook functions
   const [favoritesList, setFavoritesList] = useAsyncStorage('yoona-jc')
 
-  //get all favorites
-  function getFavorites () {
-    return favoritesList
-  }
-
   //add to favorites
   function addToFavorites (obj) {
     console.log(`Received properties, creating item '${obj}'`)
@@ -57,6 +52,21 @@ function PhonesProvider (props) {
     console.log(`Deleted ${phoneToDelete}`)
   }
 
+  //verify if phone is in favorites
+  function verifyPhoneInFavorites (phone_name) {
+    console.log(`Verify if ${phone_name} is in favorites list.`)
+
+    let foundFavorites = false
+
+    favoritesList &&
+      favoritesList.forEach(item => {
+        if (item.phone_name === phone_name) {
+          foundFavorites = true
+        }
+      })
+    return foundFavorites
+  }
+
   return (
     <PhonesContext.Provider
       value={[
@@ -68,9 +78,10 @@ function PhonesProvider (props) {
         setPhoneURL,
         phoneDetails,
         setPhoneDetails,
-        getFavorites,
+        favoritesList,
         addToFavorites,
-        deleteFromFavorites
+        deleteFromFavorites,
+        verifyPhoneInFavorites
       ]}
       {...props}
     />
