@@ -102,7 +102,7 @@ export default function HomeScreen (props) {
                     searchPhones()
                     Keyboard.dismiss()
                   }}
-                  placeholder={`Try, "iPhone 12"`}
+                  placeholder={`Try, "Huawei"`}
                   placeholderTextColor='#616264'
                   clearButtonMode='while-editing'
                   returnKeyType='search'
