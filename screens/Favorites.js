@@ -16,9 +16,12 @@ import { Ionicons } from '@expo/vector-icons'
 
 export default function Favorites ({ navigation }) {
   const [, , , , , , favoritesList, , deleteFromFavorites] = usePhonesDetails()
+<<<<<<< HEAD
   
   //load favorites on load
   //useEffect(() => {}, [favoritesList])
+=======
+>>>>>>> b03fc9c5b0d05772d7994d3b728a8b271297a48e
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
